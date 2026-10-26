@@ -73,7 +73,11 @@ async function sendWaiting(): Promise<boolean> {
   for (const item of await queuedWrites()) {
     if (item.failed) continue;
     try {
-      await api(item.method, item.path, item.body === undefined ? {} : { body: item.body });
+      await api(
+        item.method,
+        item.path,
+        item.raw ? { raw: { body: item.raw.blob, type: item.raw.type } } : { body: item.body },
+      );
       await (await db()).delete('queue', item.id);
       for (const key of item.refresh ?? []) for (const fn of invalidated) fn(key);
     } catch (err) {

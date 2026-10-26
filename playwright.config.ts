@@ -13,7 +13,8 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
   use: {
-    baseURL: 'http://localhost:4173',
+    // 127.0.0.1, not localhost: on some machines localhost resolves to ::1 and hangs.
+    baseURL: 'http://127.0.0.1:4173',
     ...devices['Pixel 5'],
     locale: 'en-US',
     serviceWorkers: 'allow',
@@ -21,8 +22,8 @@ export default defineConfig({
   },
   projects: [{ name: 'android-chrome', use: { browserName: 'chromium' } }],
   webServer: {
-    command: 'pnpm preview',
-    url: 'http://localhost:4173',
+    command: 'pnpm preview --host 127.0.0.1',
+    url: 'http://127.0.0.1:4173',
     reuseExistingServer: !process.env.CI,
     // No API behind the preview proxy: every /v1 call is faked in the test.
     env: { MEZGEB_DEV_API: 'http://127.0.0.1:9' },

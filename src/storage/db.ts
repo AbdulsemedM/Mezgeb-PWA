@@ -13,6 +13,8 @@ export interface QueuedWrite {
   method: 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   path: string;
   body?: unknown;
+  /** A raw body instead of JSON (a receipt photo). IndexedDB keeps Blobs as they are. */
+  raw?: { blob: Blob; type: string };
   /** Which cached data to refresh after it is sent. */
   refresh?: string[];
   createdAt: string;

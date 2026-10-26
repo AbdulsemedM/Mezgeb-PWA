@@ -84,6 +84,22 @@ export interface Raise {
   valid_until: string | null;
 }
 
+/** PAY-2: the customer's "I paid", until the shop confirms or rejects it. */
+export interface PaymentReport {
+  id: string;
+  account_id: string;
+  amount: number;
+  method: PaymentMethod;
+  reference: string | null;
+  status: 'reported' | 'confirmed' | 'rejected';
+  reject_reason: string | null;
+  entry_id: string | null;
+  resubmitted_from_id: string | null;
+  reviewed_at: string | null;
+  created_at: string;
+  has_receipt: boolean;
+}
+
 /** One shop's dube book, cached whole for offline reading (WEB-001). */
 export interface Book {
   account: MyAccount;
@@ -93,17 +109,19 @@ export interface Book {
   representatives: Representative[];
   /** Waiting raise requests; acted on online only. */
   raises: Raise[];
+  reports: PaymentReport[];
 }
 
 export async function fetchBook(accountId: string): Promise<Book> {
   const base = `/v1/accounts/${accountId}`;
-  const [account, entries, limits, payme, reps, raises] = await Promise.all([
+  const [account, entries, limits, payme, reps, raises, reports] = await Promise.all([
     api<MyAccount>('GET', base),
     api<{ entries: Entry[] }>('GET', `${base}/entries`),
     api<Limits>('GET', `${base}/limits`),
     api<{ payme_requests: PaymeRequest[] }>('GET', `${base}/payme-requests`),
     api<{ representatives: Representative[] }>('GET', `${base}/representatives`),
     api<{ raises: Raise[] }>('GET', `${base}/raises`),
+    api<{ payment_reports: PaymentReport[] }>('GET', `${base}/payment-reports`),
   ]);
   return {
     account,
@@ -112,6 +130,7 @@ export async function fetchBook(accountId: string): Promise<Book> {
     payme: payme.payme_requests,
     representatives: reps.representatives,
     raises: raises.raises,
+    reports: reports.payment_reports,
   };
 }
 

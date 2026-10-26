@@ -59,7 +59,7 @@ test.describe('W2: invite and install (WEB-001 steps 1–4)', () => {
     await page.goto('/install');
     await expect(page.getByRole('link', { name: 'Open in Chrome' })).toHaveAttribute(
       'href',
-      /^intent:\/\/localhost:4173\/install#Intent;scheme=http;package=com\.android\.chrome;/,
+      /^intent:\/\/127\.0\.0\.1:4173\/install#Intent;scheme=http;package=com\.android\.chrome;/,
     );
     await context.close();
   });

@@ -8,6 +8,7 @@ import { InviteScreen } from '../features/invite/InviteScreen';
 import { LimitsScreen } from '../features/limits/LimitsScreen';
 import { AddPersonScreen } from '../features/people/AddPersonScreen';
 import { PeopleScreen } from '../features/people/PeopleScreen';
+import { PayScreen } from '../features/payments/PayScreen';
 import { InvitesScreen } from '../features/invites/InvitesScreen';
 import { TermsScreen } from '../features/invites/TermsScreen';
 import { CalendarScreen } from '../features/signin/CalendarScreen';
@@ -124,6 +125,14 @@ export const routes: AppRoute[] = [
     element: (
       <RequireSession>
         <AddPersonScreen />
+      </RequireSession>
+    ),
+  },
+  {
+    path: '/shops/:accountId/pay',
+    element: (
+      <RequireSession>
+        <PayScreen />
       </RequireSession>
     ),
   },

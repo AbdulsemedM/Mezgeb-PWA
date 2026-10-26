@@ -19,6 +19,9 @@ import { LIMIT_KINDS } from '../limits/LimitsScreen';
 import { openRaises, RaiseCard } from '../limits/RaiseCard';
 import { REP_KINDS } from '../people/PeopleScreen';
 import { QueueNotice } from './QueueNotice';
+import { PAY_KINDS } from '../payments/PayScreen';
+import { ReportsList } from '../payments/ReportsList';
+import { useMarkSeen } from '../payments/use-mark-seen';
 import {
   balanceEffect,
   entryDate,
@@ -48,6 +51,8 @@ export function BookScreen() {
   const book = cached.data;
   const [view, setView] = useState<View | null>(null);
   const [filter, setFilter] = useState<string>('all');
+
+  useMarkSeen(book?.payme ?? []);
 
   const shownView: View = view ?? book?.account.customer_detail_view ?? 'simple';
   function changeView(next: View) {
@@ -83,7 +88,7 @@ export function BookScreen() {
       banner={
         <>
           <Freshness cached={cached} />
-          <QueueNotice kinds={[...LIMIT_KINDS, ...REP_KINDS]} />
+          <QueueNotice kinds={[...LIMIT_KINDS, ...REP_KINDS, ...PAY_KINDS]} />
         </>
       }
     >
@@ -111,6 +116,7 @@ export function BookScreen() {
           ))}
 
           <nav className="list" aria-label={book.account.shop.name}>
+            <ChoiceTile title={t('bookActionPay')} icon="money" to={`/shops/${accountId}/pay`} />
             <ChoiceTile
               title={t('bookActionLimits')}
               icon="settings"
@@ -122,6 +128,8 @@ export function BookScreen() {
               to={`/shops/${accountId}/people`}
             />
           </nav>
+
+          <ReportsList accountId={accountId} reports={book.reports} limit={3} />
 
           <h2 className="title">{t('ledgerTitle')}</h2>
           <Segmented

@@ -16,6 +16,7 @@ import {
 } from '../book/common';
 import { isStandalone } from '../install/install-prompt';
 import { openRaises, RaiseCard } from '../limits/RaiseCard';
+import { useMarkSeen } from '../payments/use-mark-seen';
 
 /** Pay-me requests still waiting for the customer (PAY-1). */
 export const OPEN_PAYME: PaymeRequest['status'][] = ['sent', 'seen', 'partially_paid'];
@@ -26,6 +27,7 @@ export function HomeScreen() {
   const cached = useCached<HomeData>('home', fetchHome);
   const pull = usePullToRefresh(() => void cached.refresh());
   const data = cached.data;
+  useMarkSeen(data?.payme ?? []);
   const open = data?.accounts.filter((a) => a.status === 'active' || a.status === 'paused') ?? [];
   const pending = data?.accounts.filter((a) => a.status === 'pending') ?? [];
   const asks = data?.payme.filter((p) => OPEN_PAYME.includes(p.status)) ?? [];
@@ -126,6 +128,11 @@ function PaymeCard({ request, shop }: { request: PaymeRequest; shop: string }) {
       {request.payment_details && (
         <p className="small">{t('paymeHowToPay', { details: request.payment_details })}</p>
       )}
+      <BigButton
+        label={t('paymeIPaid')}
+        icon="money"
+        to={`/shops/${request.account_id}/pay?payme=${request.id}`}
+      />
       <BigButton label={shop} icon="book" variant="secondary" to={`/shops/${request.account_id}`} />
     </section>
   );
