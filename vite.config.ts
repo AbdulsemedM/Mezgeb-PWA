@@ -8,6 +8,41 @@ import { VitePWA } from 'vite-plugin-pwa';
 const devApi = process.env.MEZGEB_DEV_API ?? 'http://localhost:3000';
 
 /**
+ * WEB-001 "Opening later links": Android App Links let the Flutter app (et.mezgeb.app) open
+ * invite links when it is installed. ANDROID_CERT_SHA256 lists its release signing
+ * certificate fingerprints (comma separated, AA:BB:…); unset, the file links no app.
+ */
+function assetLinks(): Plugin {
+  return {
+    name: 'mezgeb:assetlinks',
+    apply: 'build',
+    generateBundle() {
+      const fingerprints = (process.env.ANDROID_CERT_SHA256 ?? '')
+        .split(',')
+        .map((f) => f.trim().toUpperCase())
+        .filter(Boolean);
+      const statements = fingerprints.length
+        ? [
+            {
+              relation: ['delegate_permission/common.handle_all_urls'],
+              target: {
+                namespace: 'android_app',
+                package_name: 'et.mezgeb.app',
+                sha256_cert_fingerprints: fingerprints,
+              },
+            },
+          ]
+        : [];
+      this.emitFile({
+        type: 'asset',
+        fileName: '.well-known/assetlinks.json',
+        source: `${JSON.stringify(statements, null, 2)}\n`,
+      });
+    },
+  };
+}
+
+/**
  * Slow 3G spends 2 s per round trip, so the first visit is one request: the entry script and
  * stylesheet are inlined into index.html (WEB-001 budget). The service worker then keeps it.
  */
@@ -63,6 +98,7 @@ export default defineConfig({
     // Preact behind the React API (WEB-001 budget): `react` imports resolve to preact/compat.
     preact(),
     inlineEntry(),
+    assetLinks(),
     VitePWA({
       strategies: 'injectManifest',
       srcDir: 'src',

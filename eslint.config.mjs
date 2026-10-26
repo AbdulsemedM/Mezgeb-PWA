@@ -33,7 +33,7 @@ export default tseslint.config(
   },
   {
     // Tests assert on loosely typed JSON, as in the backend.
-    files: ['**/*.test.{ts,tsx}', 'e2e/**'],
+    files: ['**/*.test.{ts,tsx}', 'src/test/**', 'e2e/**'],
     rules: { '@typescript-eslint/no-explicit-any': 'off' },
   },
   {

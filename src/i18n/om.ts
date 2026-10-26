@@ -74,6 +74,8 @@ export const om: Messages = {
   installMenuStep1: 'Gubbaa mirgaa irratti ⋮ tuqi.',
   installMenuStep2: '“Install app” ykn “Add to Home screen” tuqi.',
   installMenuStep3: '“Install” tuqi.',
+  installMenuNoInstall:
+    "“Install app” hin argitu? Gadii “Chrome keessatti bani” tuqiitii irra deebi'ii yaali.",
   installIphoneTitle: 'iPhone irratti',
   installIphoneStep1: 'Furtuu qooduu (Share) gadii jiru tuqi.',
   installIphoneStep2: '“Add to Home Screen” tuqi.',

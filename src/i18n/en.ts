@@ -69,6 +69,7 @@ export const en = {
   installMenuStep1: 'Tap ⋮ at the top right.',
   installMenuStep2: 'Tap “Install app” or “Add to Home screen”.',
   installMenuStep3: 'Tap “Install”.',
+  installMenuNoInstall: 'No “Install app”? Tap “Open in Chrome” below, then try again.',
   installIphoneTitle: 'On iPhone',
   installIphoneStep1: 'Tap the Share button at the bottom.',
   installIphoneStep2: 'Tap “Add to Home Screen”.',

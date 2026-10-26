@@ -66,6 +66,7 @@ export const am: Messages = {
   installMenuStep1: 'ከላይ በቀኝ ⋮ን ይንኩ።',
   installMenuStep2: '“Install app” ወይም “Add to Home screen”ን ይንኩ።',
   installMenuStep3: '“Install”ን ይንኩ።',
+  installMenuNoInstall: '“Install app” አላዩም? ከታች “በክሮም ክፈት”ን ይንኩ፣ ከዚያ እንደገና ይሞክሩ።',
   installIphoneTitle: 'በአይፎን',
   installIphoneStep1: 'ከታች ያለውን የማጋሪያ (Share) ቁልፍ ይንኩ።',
   installIphoneStep2: '“Add to Home Screen”ን ይንኩ።',

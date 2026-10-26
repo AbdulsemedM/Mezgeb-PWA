@@ -18,7 +18,11 @@ function notify(): void {
   for (const l of listeners) l();
 }
 
+const captured = new WeakSet<Window>();
+
 export function captureInstallPrompt(target: Window = window): void {
+  if (captured.has(target)) return;
+  captured.add(target);
   target.addEventListener('beforeinstallprompt', (e) => {
     // Keep Chrome's mini-infobar away: the app offers installing in its own words.
     e.preventDefault();
