@@ -30,6 +30,7 @@ export function LimitBlock({ balance, limits }: { balance: number; limits: Limit
       {limit !== null && limit > 0 ? (
         <>
           <LimitUsageBar
+            label={t('limitsTitle')}
             used={balance / limit}
             words={
               balance >= limit

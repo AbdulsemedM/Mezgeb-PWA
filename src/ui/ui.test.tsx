@@ -128,7 +128,9 @@ describe('UI kit', () => {
   });
 
   it('LimitUsageBar uses words and an icon, not only colour', () => {
-    const { container } = wrap(<LimitUsageBar used={0.85} words="85% of the limit used" />);
+    const { container } = wrap(
+      <LimitUsageBar label="Limits" used={0.85} words="85% of the limit used" />,
+    );
     expect(screen.getByRole('progressbar')).toHaveAttribute(
       'aria-valuetext',
       '85% of the limit used',
