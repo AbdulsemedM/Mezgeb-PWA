@@ -20,8 +20,7 @@ export function InviteScreen() {
   const { t, chosen, setLanguage } = useI18n();
   const [lookup, setLookup] = useState<InviteLookup | 'loading' | 'error'>('loading');
 
-  const load = useCallback(() => {
-    setLookup('loading');
+  const fetchInvite = useCallback(() => {
     lookUpInvite(code).then(
       (result) => {
         // The shop chose the SMS language: start there unless the person already chose.
@@ -34,7 +33,12 @@ export function InviteScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
-  useEffect(load, [load]);
+  useEffect(fetchInvite, [fetchInvite]);
+
+  const load = () => {
+    setLookup('loading');
+    fetchInvite();
+  };
 
   const help = { title: t('helpButton'), body: t('inviteHelpBody') };
 

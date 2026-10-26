@@ -1,14 +1,18 @@
 import { render } from '@testing-library/preact';
+import { useEffect } from 'react';
 import { MemoryRouter, useLocation } from 'react-router';
 import { vi } from 'vitest';
 import { AppRoutes } from '../app/App';
 import { I18nProvider, type Language } from '../i18n';
 import { SuccessFeedbackProvider } from '../ui';
 
-let currentPath = '';
+const probe = { path: '' };
 
 function LocationProbe() {
-  currentPath = useLocation().pathname;
+  const { pathname } = useLocation();
+  useEffect(() => {
+    probe.path = pathname;
+  }, [pathname]);
   return null;
 }
 
@@ -24,7 +28,7 @@ export function renderApp(path: string, language: Language = 'en') {
       </SuccessFeedbackProvider>
     </I18nProvider>,
   );
-  return { ...result, path: () => currentPath };
+  return { ...result, path: () => probe.path };
 }
 
 type Handler = (req: { method: string; path: string; body: any }) => Response | Promise<Response>;
