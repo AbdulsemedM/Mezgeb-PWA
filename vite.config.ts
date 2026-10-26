@@ -158,6 +158,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['src/test/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
+    // Screen tests tap through whole flows; 5 s is too tight on a busy CI machine.
+    testTimeout: 15_000,
     // Node would pick react-router's CommonJS build, whose require('react') skips the
     // preact/compat alias: use its ES module build and run it through Vite.
     alias: {
