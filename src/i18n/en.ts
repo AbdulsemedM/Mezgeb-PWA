@@ -138,6 +138,11 @@ export const en = {
   wrongNumberBody:
     'The shop invited a different number. Ask the shop to check the number, or sign in with that number.',
   joinedShop: 'Done. Your dube book with {shop} is open.',
+  termsShop: 'Your dube book with {shop}',
+  termsOutdatedWhat: 'Mezgeb has a new agreement.',
+  termsOutdatedToDo: 'Close Mezgeb and open it again, then try again.',
+  needInternetAction: 'You need internet for this. Connect, then try again.',
+  useAnotherNumber: 'Sign in with another number',
 
   // Home before W4 fills it.
   homeTitle: 'My shops',

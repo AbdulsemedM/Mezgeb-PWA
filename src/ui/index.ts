@@ -5,6 +5,7 @@ export { AmountKeypad, NumberPad } from './AmountKeypad';
 export { AmountText } from './AmountText';
 export { BigButton } from './BigButton';
 export { CalmBanner } from './CalmBanner';
+export { CodeBoxes, PhoneDisplay } from './DigitDisplay';
 export { ChoiceTile } from './ChoiceTile';
 export { ConfirmSheet } from './ConfirmSheet';
 export { EmptyState } from './EmptyState';

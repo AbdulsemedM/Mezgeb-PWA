@@ -702,3 +702,42 @@ p {
 .tabs__tab[aria-current='page'] {
   color: var(--ledger);
 }
+
+/* ---- Typed phone numbers and SMS codes ---- */
+
+.digit-display {
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  border: 2px solid var(--ledger);
+  background: var(--surface);
+  font-size: 1.875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  min-height: var(--tap);
+}
+
+.digit-display--placeholder {
+  color: var(--ink2);
+}
+
+.code-boxes {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--gap);
+}
+
+.code-boxes__box {
+  min-height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 2px solid var(--rule);
+  background: var(--surface);
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.code-boxes__box--next {
+  border-color: var(--ledger);
+}

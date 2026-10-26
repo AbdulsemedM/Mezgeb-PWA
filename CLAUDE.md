@@ -28,6 +28,10 @@ Node 22, pnpm 10. The backend repo is expected at `../backend` (shared code, loc
 - `pnpm lint`, `pnpm typecheck` (app, service worker, Node configs), `pnpm format`.
 - `pnpm sync:shared` — copy the backend's shared code after it changes. Never edit `src/shared`.
 - `pnpm font:subset` — after changing `src/i18n/am.ts` (a test fails otherwise). `pnpm icons`.
+- Live check against a real local API (not in CI): run the API (`../backend`, `OTP_FIXED_CODE` set),
+  `MEZGEB_DEV_API=http://localhost:8000 pnpm dev`, then
+  `node e2e/live/us02-live.mjs "$(node e2e/live/seed-invite.mjs)"`. It writes test data to the
+  local database.
 
 ## Patterns
 - Runtime is Preact behind the React API: import from `react`, test with `@testing-library/preact`.
@@ -38,3 +42,8 @@ Node 22, pnpm 10. The backend repo is expected at `../backend` (shared code, loc
 - API: `api(method, path, {body})` from `src/api/client.ts` throws `ApiError {status, code}` or
   `OfflineError`; the session (`src/auth/session.ts`) renews the access token itself.
 - Storage: IndexedDB via `src/storage/db.ts` (`kv`, `cache`, `queue`). Never the refresh token.
+- Routes in `src/app/routes.tsx`, wrapped in gates (`src/app/gates.tsx`): `RequireSession`
+  (signed in with a calendar), `RequireSignedIn`, `SignedOutOnly`. `useLoad(fn, deps)` loads data
+  with `loading | ready | offline | error`; offline shows a CalmBanner, never an error.
+- Unit tests render the whole app with `renderApp(path)` and fake the API with
+  `fakeFetch({'GET /v1/...': handler})` (`src/test/render.tsx`); e2e uses `fakeApi(page, …)`.

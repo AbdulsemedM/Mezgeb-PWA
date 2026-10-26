@@ -37,7 +37,7 @@ export default tseslint.config(
     rules: { '@typescript-eslint/no-explicit-any': 'off' },
   },
   {
-    files: ['scripts/**', '*.config.*'],
+    files: ['scripts/**', 'e2e/live/**', '*.config.*'],
     languageOptions: { globals: { ...globals.node } },
   },
   prettier,

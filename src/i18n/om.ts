@@ -144,6 +144,11 @@ export const om: Messages = {
   wrongNumberBody:
     'Suuqiin lakkoofsa biraa affeere. Suuqiin lakkoofsa akka mirkaneessu gaafadhu, ykn lakkoofsa sanaan seeni.',
   joinedShop: 'Xumurameera. Kitaabni dube kee {shop} waliin banameera.',
+  termsShop: 'Kitaaba dube kee {shop} waliin',
+  termsOutdatedWhat: 'Mezgeb waliigaltee haaraa qaba.',
+  termsOutdatedToDo: "Mezgeb cufiitii irra deebi'ii bani, achiis irra deebi'ii yaali.",
+  needInternetAction: "Kanaaf interneetiin barbaachisa. Walqabsiisiitii irra deebi'ii yaali.",
+  useAnotherNumber: 'Lakkoofsa biraatiin seeni',
 
   homeTitle: 'Suuqiiwwan koo',
   settingsTitle: "Qindaa'ina",

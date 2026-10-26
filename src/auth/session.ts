@@ -3,7 +3,7 @@ import { api, ApiError, OfflineError, setTokenSource } from '../api/client';
 import type { Language } from '../i18n';
 import type { CalendarPref } from '../lib/dates';
 import { clearPersonalData, kvGet, kvSet } from '../storage/db';
-import { getDevice, signText } from './device-key';
+import { type Device, getDevice, replaceDevice, signText } from './device-key';
 
 export interface User {
   id: string;
@@ -79,16 +79,28 @@ export async function verifyCode(
   phone: string,
   code: string,
 ): Promise<{ user: User; isNewUser: boolean }> {
-  const device = await getDevice();
-  const res = await api<VerifyResponse>('POST', '/v1/auth/verify', {
-    auth: false,
-    body: {
-      phone,
-      code,
-      device: { id: device.id, public_key: device.publicKey, label: 'Mezgeb web' },
-      session: 'cookie',
-    },
-  });
+  const send = async (device: Device) =>
+    api<VerifyResponse>('POST', '/v1/auth/verify', {
+      auth: false,
+      body: {
+        phone,
+        code,
+        device: { id: device.id, public_key: device.publicKey, label: 'Mezgeb web' },
+        session: 'cookie',
+      },
+    });
+  let res: VerifyResponse;
+  try {
+    res = await send(await getDevice());
+  } catch (err) {
+    // A revoked device, or one registered to another person: the server rolled the whole
+    // sign-in back (OTP included), so the same code works with a fresh device key.
+    if (err instanceof ApiError && ['device_revoked', 'device_conflict'].includes(err.code)) {
+      res = await send(await replaceDevice());
+    } else {
+      throw err;
+    }
+  }
   access = { token: res.access_token, expiresAt: Date.parse(res.access_expires_at) };
   await kvSet(KEY, { refreshId: res.refresh_id, user: res.user } satisfies StoredSession);
   setState({ status: 'signed-in', user: res.user });
@@ -101,6 +113,15 @@ export async function updateStoredUser(user: User): Promise<void> {
   if (!saved) return;
   await kvSet(KEY, { ...saved, user } satisfies StoredSession);
   setState({ status: 'signed-in', user });
+}
+
+/** `PATCH /v1/me`: language and calendar follow the person to the SMS and the app. */
+export async function updateMe(
+  patch: Partial<Pick<User, 'language' | 'calendar_pref' | 'name'>>,
+): Promise<User> {
+  const user = await api<User>('PATCH', '/v1/me', { body: patch });
+  await updateStoredUser(user);
+  return user;
 }
 
 export async function signOut(): Promise<void> {

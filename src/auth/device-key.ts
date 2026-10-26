@@ -1,5 +1,5 @@
 import { p1363ToDer } from '@shared/ecdsa';
-import { kvGet, kvSet } from '../storage/db';
+import { kvDelete, kvGet, kvSet } from '../storage/db';
 
 /**
  * The PWA's device (ADR-005, ADR-016): an ECDSA P-256 key made with WebCrypto as
@@ -22,6 +22,16 @@ export function getDevice(): Promise<Device> {
     throw err;
   });
   return pending;
+}
+
+/**
+ * A new key and id: the old device was revoked (from another phone, or after a sign-out
+ * elsewhere) or belongs to another person on this shared phone (ADR-005 `device_conflict`).
+ */
+export async function replaceDevice(): Promise<Device> {
+  await kvDelete(KEY);
+  pending = undefined;
+  return getDevice();
 }
 
 async function load(): Promise<Device> {

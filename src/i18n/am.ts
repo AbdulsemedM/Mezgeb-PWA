@@ -130,6 +130,11 @@ export const am: Messages = {
   wrongNumberTitle: 'የተሳሳተ ቁጥር?',
   wrongNumberBody: 'ሱቁ ሌላ ቁጥር ጋብዟል። ሱቁ ቁጥሩን እንዲያረጋግጥ ይጠይቁ፣ ወይም በዚያ ቁጥር ይግቡ።',
   joinedShop: 'ተጠናቋል። ከ{shop} ጋር ያለዎት የዱቤ ደብተር ተከፍቷል።',
+  termsShop: 'ከ{shop} ጋር ያለዎት የዱቤ ደብተር',
+  termsOutdatedWhat: 'መዝገብ አዲስ ስምምነት አለው።',
+  termsOutdatedToDo: 'መዝገብን ዘግተው እንደገና ይክፈቱ፣ ከዚያ እንደገና ይሞክሩ።',
+  needInternetAction: 'ለዚህ ኢንተርኔት ያስፈልጋል። ያገናኙና እንደገና ይሞክሩ።',
+  useAnotherNumber: 'በሌላ ቁጥር ይግቡ',
 
   homeTitle: 'ሱቆቼ',
   settingsTitle: 'ቅንብሮች',
