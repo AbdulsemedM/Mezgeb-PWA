@@ -52,7 +52,7 @@ test.describe('W4: the dube book', () => {
     await context.setOffline(false);
   });
 
-  test('W5–W7: action screens at 200% with big tap targets', async ({ page }) => {
+  test('W5–W8: action screens at 200% with big tap targets', async ({ page }) => {
     await signedInBook(page);
     for (const [path, ready] of [
       ['/shops/acc-1/limits', 'Save my limit'],
@@ -61,6 +61,7 @@ test.describe('W4: the dube book', () => {
       ['/shops/acc-1/orders', 'New order'],
       ['/shops/acc-1/orders/new', 'Send the list to the shop'],
       ['/shops/acc-1/entries/e-1/dispute', 'Send to the shop'],
+      ['/settings', 'Sign out'],
     ] as const) {
       await page.goto(path);
       await expect(

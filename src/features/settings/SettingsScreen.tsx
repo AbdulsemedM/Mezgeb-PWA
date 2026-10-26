@@ -7,6 +7,7 @@ import { type CalendarPref, displayInstantDate } from '../../lib/dates';
 import { BigButton, CalmBanner, ChoiceTile, ConfirmSheet, Screen } from '../../ui';
 import { LanguagePicker } from '../start/LanguagePicker';
 import { displayPhone } from '../signin/phone-digits';
+import { disablePush, enablePush, type PushState, pushState } from '../notifications/push';
 
 /** Language, calendar, sign out (ADR-003: both choices can be changed later). */
 export function SettingsScreen() {
@@ -16,6 +17,7 @@ export function SettingsScreen() {
   const [confirm, setConfirm] = useState(false);
   const [offline, setOffline] = useState(false);
   const user = session.status === 'signed-in' ? session.user : null;
+  const [push, setPush] = useState<PushState>(() => pushState());
 
   const save = (patch: { language?: Language; calendar_pref?: CalendarPref }) => {
     setOffline(false);
@@ -47,6 +49,24 @@ export function SettingsScreen() {
           />
         ))}
       </div>
+      <h2 className="title">{t('pushSettingsTitle')}</h2>
+      {push === 'off' ? (
+        <ChoiceTile
+          checkbox
+          title={t('pushSettingsTitle')}
+          subtitle={t('pushStateOff')}
+          selected={false}
+          onClick={() => void enablePush().then(setPush)}
+        />
+      ) : (
+        <p className="muted">
+          {push === 'on'
+            ? t('pushStateOn')
+            : push === 'blocked'
+              ? t('pushStateBlocked')
+              : t('pushStateUnsupported')}
+        </p>
+      )}
       <ConfirmSheet
         open={confirm}
         question={t('signOutConfirm')}
@@ -54,7 +74,9 @@ export function SettingsScreen() {
         onCancel={() => setConfirm(false)}
         onConfirm={() => {
           setConfirm(false);
-          void signOut().then(() => navigate('/start', { replace: true }));
+          void disablePush()
+            .then(signOut)
+            .then(() => navigate('/start', { replace: true }));
         }}
       />
     </Screen>

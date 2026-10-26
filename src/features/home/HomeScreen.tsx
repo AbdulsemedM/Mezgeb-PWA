@@ -16,6 +16,7 @@ import {
 } from '../book/common';
 import { isStandalone } from '../install/install-prompt';
 import { openRaises, RaiseCard } from '../limits/RaiseCard';
+import { PushCard } from '../notifications/PushCard';
 import { useMarkSeen } from '../payments/use-mark-seen';
 
 /** Pay-me requests still waiting for the customer (PAY-1). */
@@ -96,6 +97,8 @@ export function HomeScreen() {
           <EmptyState icon="book" message={t('myShopsEmpty')} detail={t('myShopsEmptyBody')} />
         )
       )}
+
+      {open[0] && <PushCard shop={open[0].shop.name} />}
 
       {!isStandalone() && (
         <section className="card">

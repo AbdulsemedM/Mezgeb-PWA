@@ -24,8 +24,10 @@ interface AsButton extends Common {
 interface AsLink extends Common {
   /** In-app route. */
   to?: string;
-  /** External link (tel:, intent:, https:). */
+  /** External link (tel:, intent:, https:), or a file with `download`. */
   href?: string;
+  /** Save `href` as a file with this name. */
+  download?: string;
   onClick?: () => void;
 }
 
@@ -51,7 +53,7 @@ export function BigButton(props: AsButton | AsLink) {
   }
   if ('href' in props && props.href) {
     return (
-      <a className={className} href={props.href} onClick={props.onClick}>
+      <a className={className} href={props.href} download={props.download} onClick={props.onClick}>
         {content(label)}
       </a>
     );

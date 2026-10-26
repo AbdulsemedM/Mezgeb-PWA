@@ -26,6 +26,11 @@ export function onInvalidate(fn: (key: string) => void): () => void {
   return () => invalidated.delete(fn);
 }
 
+/** Something changed on the server (a push arrived): refresh this cached data. */
+export function invalidate(key: string): void {
+  for (const fn of invalidated) fn(key);
+}
+
 export async function enqueue(
   write: Omit<QueuedWrite, 'id' | 'createdAt' | 'attempts'>,
 ): Promise<QueuedWrite> {

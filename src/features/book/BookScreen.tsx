@@ -19,6 +19,7 @@ import { LIMIT_KINDS } from '../limits/LimitsScreen';
 import { openRaises, RaiseCard } from '../limits/RaiseCard';
 import { REP_KINDS } from '../people/PeopleScreen';
 import { QueueNotice } from './QueueNotice';
+import { StatementSheet } from './StatementSheet';
 import { ORDER_KINDS } from '../orders/NewOrderScreen';
 import { PAY_KINDS } from '../payments/PayScreen';
 import { ReportsList } from '../payments/ReportsList';
@@ -52,6 +53,7 @@ export function BookScreen() {
   const book = cached.data;
   const [view, setView] = useState<View | null>(null);
   const [filter, setFilter] = useState<string>('all');
+  const [statementOpen, setStatementOpen] = useState(false);
 
   useMarkSeen(book?.payme ?? []);
 
@@ -133,6 +135,11 @@ export function BookScreen() {
               icon="people"
               to={`/shops/${accountId}/people`}
             />
+            <ChoiceTile
+              title={t('statement')}
+              icon="share"
+              onClick={() => setStatementOpen(true)}
+            />
           </nav>
 
           <ReportsList accountId={accountId} reports={book.reports} limit={3} />
@@ -167,6 +174,15 @@ export function BookScreen() {
         </>
       )}
       <RefreshRow cached={cached} />
+      {book && (
+        <StatementSheet
+          open={statementOpen}
+          onClose={() => setStatementOpen(false)}
+          accountId={accountId}
+          shop={book.account.shop.name}
+          since={book.account.created_at}
+        />
+      )}
     </Screen>
   );
 }

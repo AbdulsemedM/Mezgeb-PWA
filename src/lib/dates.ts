@@ -1,5 +1,16 @@
-import { ETHIOPIAN_MONTHS, gregorianToEthiopian } from '@shared/calendar/ethiopian';
-import { ADDIS_OFFSET_MS, type LocalDate, localDate, parseLocalDate } from '@shared/calendar/local';
+import {
+  ETHIOPIAN_MONTHS,
+  ethiopianToGregorian,
+  gregorianToEthiopian,
+} from '@shared/calendar/ethiopian';
+import {
+  ADDIS_OFFSET_MS,
+  addDays,
+  formatLocalDate,
+  type LocalDate,
+  localDate,
+  parseLocalDate,
+} from '@shared/calendar/local';
 import type { Language } from '../i18n';
 
 /** ADR-003: each person picks Ethiopian or Gregorian once. */
@@ -68,3 +79,37 @@ export function displayWhen(
 }
 
 export { localDate };
+
+export type StatementPeriod = 'this_month' | 'last_month' | 'everything';
+
+/**
+ * LED-7 statement periods as Addis local dates (`from` and `to` both included), with months in
+ * the reader's calendar (ADR-003): "this month" in the Ethiopian calendar starts on the 1st of
+ * the Ethiopian month. Pagume is its own short month here.
+ */
+export function statementRange(
+  period: StatementPeriod,
+  calendar: CalendarPref,
+  today: LocalDate,
+  since: LocalDate,
+): { from: LocalDate; to: LocalDate } {
+  if (period === 'everything') return { from: since, to: today };
+  const g = parseLocalDate(today);
+  let thisStart: LocalDate;
+  let lastStart: LocalDate;
+  if (calendar === 'ethiopian') {
+    const e = gregorianToEthiopian(g);
+    thisStart = formatLocalDate(ethiopianToGregorian({ year: e.year, month: e.month, day: 1 }));
+    const prev =
+      e.month === 1 ? { year: e.year - 1, month: 13 } : { year: e.year, month: e.month - 1 };
+    lastStart = formatLocalDate(ethiopianToGregorian({ ...prev, day: 1 }));
+  } else {
+    thisStart = formatLocalDate({ year: g.year, month: g.month, day: 1 });
+    const prev =
+      g.month === 1 ? { year: g.year - 1, month: 12 } : { year: g.year, month: g.month - 1 };
+    lastStart = formatLocalDate({ ...prev, day: 1 });
+  }
+  return period === 'this_month'
+    ? { from: thisStart, to: today }
+    : { from: lastStart, to: addDays(thisStart, -1) };
+}
