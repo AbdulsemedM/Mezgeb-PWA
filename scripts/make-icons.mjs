@@ -1,35 +1,45 @@
-// Draws the Mezgeb app icons (an open dube book on ledger green) as PNGs, with no image
-// dependencies. Usage: node scripts/make-icons.mjs
+// Draws the Nota app icons (MOB-005: two interlocked rings, bank cyan over bank orange, on
+// white) as PNGs, with no image dependencies. Same mark as ../mobile/docs/brand/nota-mark.svg.
+// Usage: node scripts/make-icons.mjs
 import { writeFile } from 'node:fs/promises';
 import { deflateSync } from 'node:zlib';
 
-const GREEN = [0x1e, 0x6a, 0x52];
-const PAPER = [0xf4, 0xf7, 0xf2];
-const LINE = [0x9f, 0xc4, 0xb3];
+const CYAN = [0x00, 0xad, 0xef];
+const ORANGE = [0xe4, 0x86, 0x26];
+const WHITE = [0xff, 0xff, 0xff];
 
-/** Coverage-sampled drawing on a size×size canvas; shapes use 0..1 coordinates. */
-function draw(size, { radius, inset }) {
+// The mark on its 100-unit grid: ring centres, radius, stroke, and the gap where cyan passes over.
+const A = [37, 50];
+const B = [63, 50];
+const R = 23;
+const STROKE = 12;
+const GAP = 19;
+// Cyan crosses over orange at the top crossing (arc from -100° to -10° on ring A).
+const OVER = [(-100 * Math.PI) / 180, (-10 * Math.PI) / 180];
+
+/** The mark's colour at (x, y) on the 100-unit grid, or null for background. */
+function mark(x, y) {
+  const ring = ([cx, cy], width) => Math.abs(Math.hypot(x - cx, y - cy) - R) <= width / 2;
+  const angle = Math.atan2(y - A[1], x - A[0]);
+  const over = angle >= OVER[0] && angle <= OVER[1];
+  if (over && ring(A, STROKE)) return CYAN;
+  if (over && ring(A, GAP)) return WHITE;
+  if (ring(B, STROKE)) return ORANGE;
+  if (ring(A, STROKE)) return CYAN;
+  return null;
+}
+
+/** Coverage-sampled drawing on a size×size canvas; the mark spans `scale` of the width. */
+function draw(size, { radius, scale }) {
   const px = new Uint8ClampedArray(size * size * 4);
   const S = 4; // samples per axis
-  const inRoundRect = (x, y, x0, y0, x1, y1, r) => {
-    if (x < x0 || x > x1 || y < y0 || y > y1) return false;
-    const cx = Math.min(Math.max(x, x0 + r), x1 - r);
-    const cy = Math.min(Math.max(y, y0 + r), y1 - r);
+  const inRoundRect = (x, y, r) => {
+    const cx = Math.min(Math.max(x, r), 1 - r);
+    const cy = Math.min(Math.max(y, r), 1 - r);
     return (x - cx) ** 2 + (y - cy) ** 2 <= r * r;
   };
-  // The book: two pages meeting at a spine, slightly tilted like an open notebook.
-  const k = 1 - 2 * inset;
-  const m = (v) => inset + v * k;
-  const pageL = (x, y) => inRoundRect(x, y, m(0.12), m(0.22), m(0.49), m(0.8), 0.03 * k);
-  const pageR = (x, y) => inRoundRect(x, y, m(0.51), m(0.22), m(0.88), m(0.8), 0.03 * k);
-  const lines = (x, y) => {
-    for (const ly of [0.36, 0.48, 0.6]) {
-      if (Math.abs(y - m(ly)) < 0.018 * k) {
-        if ((x > m(0.18) && x < m(0.44)) || (x > m(0.56) && x < m(0.82))) return true;
-      }
-    }
-    return false;
-  };
+  // The mark's grid runs 8..92 across; centre it and scale it to `scale` of the icon.
+  const toGrid = (v) => 50 + ((v - 0.5) * 84) / scale;
 
   for (let py = 0; py < size; py++) {
     for (let pxi = 0; pxi < size; pxi++) {
@@ -39,9 +49,9 @@ function draw(size, { radius, inset }) {
         for (let sx = 0; sx < S; sx++) {
           const x = (pxi + (sx + 0.5) / S) / size;
           const y = (py + (sy + 0.5) / S) / size;
-          if (!inRoundRect(x, y, 0, 0, 1, 1, radius)) continue;
+          if (!inRoundRect(x, y, radius)) continue;
           bg += 1;
-          const c = lines(x, y) ? LINE : pageL(x, y) || pageR(x, y) ? PAPER : GREEN;
+          const c = mark(toGrid(x), toGrid(y)) ?? WHITE;
           acc[0] += c[0];
           acc[1] += c[1];
           acc[2] += c[2];
@@ -98,10 +108,10 @@ function crc32(buf) {
 }
 
 const out = (name) => new URL(`../public/icons/${name}`, import.meta.url);
-await writeFile(out('icon-192.png'), draw(192, { radius: 0.22, inset: 0 }));
-await writeFile(out('icon-512.png'), draw(512, { radius: 0.22, inset: 0 }));
-// Maskable: full bleed, the book inside the 80% safe zone.
-await writeFile(out('maskable-512.png'), draw(512, { radius: 0, inset: 0.12 }));
+await writeFile(out('icon-192.png'), draw(192, { radius: 0.22, scale: 0.78 }));
+await writeFile(out('icon-512.png'), draw(512, { radius: 0.22, scale: 0.78 }));
+// Maskable: full bleed, the mark inside the 80% safe zone.
+await writeFile(out('maskable-512.png'), draw(512, { radius: 0, scale: 0.62 }));
 // iOS adds its own rounding and needs no transparency.
-await writeFile(out('apple-touch-icon.png'), draw(180, { radius: 0, inset: 0.04 }));
+await writeFile(out('apple-touch-icon.png'), draw(180, { radius: 0, scale: 0.72 }));
 console.log('icons written');

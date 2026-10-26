@@ -146,8 +146,8 @@ export default defineConfig({
         scope: '/',
         display: 'standalone',
         orientation: 'portrait',
-        theme_color: '#1E6A52',
-        background_color: '#F4F7F2',
+        theme_color: '#00ADEF',
+        background_color: '#F3F8FB',
         icons: [
           { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },

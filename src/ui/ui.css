@@ -1,5 +1,7 @@
 /*
  * The PWA's UI kit styles (MOB-002), mirroring the Flutter app's theme (lib/app/theme).
+ * Colours: exactly the bank's cyan (--ledger) and orange (--margin), light only (MOB-005).
+ * Neither is ever a text colour: they are too light; text on --ledger is --ledger-ink.
  * Text sizes are in rem so the phone's font size setting scales them (200% must work);
  * tap targets never shrink below 56px.
  */
@@ -21,20 +23,21 @@
 }
 
 :root {
-  color-scheme: light dark;
-  --paper: #f4f7f2;
+  color-scheme: light;
+  --paper: #f3f8fb;
   --surface: #ffffff;
-  --ink: #14302a;
-  --ink2: #536a62;
-  --ink3: #7c918a;
-  --rule: #d3dfd5;
-  --chip: #e3ede5;
-  --ledger: #1e6a52;
-  --ledger-ink: #ffffff;
-  --ledger-soft: #dcede3;
+  --ink: #0f2a38;
+  --ink2: #4d6573;
+  --ink3: #7d929e;
+  --rule: #d2e2eb;
+  --chip: #e4f1f8;
+  --ledger: #00adef;
+  --ledger-ink: #0f2a38;
+  --ledger-soft: #ddf4fd;
+  --margin: #e48626;
   --good: #1e7644;
-  --warn: #905b0f;
-  --warn-soft: #fbf0dc;
+  --warn: #8a5410;
+  --warn-soft: #fcefdf;
   --crit: #b3261e;
   --crit-ink: #ffffff;
   --crit-soft: #f8e1de;
@@ -58,27 +61,6 @@
   --title: 1.5rem;
   --headline: 1.875rem;
   --font: 'Noto Sans Ethiopic', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #101917;
-    --surface: #17221f;
-    --ink: #e2ece6;
-    --ink2: #a3b7af;
-    --ink3: #7e948c;
-    --rule: #27362f;
-    --chip: #1f2d28;
-    --ledger: #4fbf92;
-    --ledger-ink: #06231a;
-    --ledger-soft: #1b3a2f;
-    --good: #5cc98a;
-    --warn: #e3a948;
-    --warn-soft: #3a2e17;
-    --crit: #f07a70;
-    --crit-ink: #2a0906;
-    --crit-soft: #3d1f1c;
-  }
 }
 
 *,
@@ -229,7 +211,7 @@ p {
 
 .big-button--secondary {
   background: var(--surface);
-  color: var(--ledger);
+  color: var(--ink);
   border-color: var(--ledger);
 }
 
@@ -375,7 +357,7 @@ p {
 }
 
 .choice-tile__trailing {
-  color: var(--ledger);
+  color: var(--ink);
 }
 
 /* ---- Banners and panels ---- */
@@ -408,7 +390,7 @@ p {
   border-radius: 10px;
   border: 2px solid var(--ledger);
   background: var(--surface);
-  color: var(--ledger);
+  color: var(--ink);
   font-weight: 700;
   cursor: pointer;
 }
@@ -706,7 +688,8 @@ p {
 }
 
 .tabs__tab[aria-current='page'] {
-  color: var(--ledger);
+  background: var(--ledger);
+  color: var(--ledger-ink);
 }
 
 /* ---- Typed phone numbers and SMS codes ---- */
@@ -770,8 +753,8 @@ p {
 }
 
 .segmented__option[aria-checked='true'] {
-  background: var(--surface);
-  color: var(--ledger);
+  background: var(--ledger);
+  color: var(--ledger-ink);
   box-shadow: 0 1px 3px rgb(0 0 0 / 0.15);
 }
 
@@ -808,6 +791,8 @@ p {
   padding: 12px var(--gutter);
   border-radius: var(--radius);
   border: 1px solid var(--rule);
+  /* The orange margin line of the paper dube book (MOB-005). */
+  box-shadow: inset 4px 0 0 var(--margin);
   background: var(--surface);
   color: var(--ink);
   text-decoration: none;
@@ -852,7 +837,7 @@ p {
 
 .stepper__button {
   border: 2px solid var(--ledger);
-  color: var(--ledger);
+  color: var(--ink);
   border-radius: 12px;
 }
 
@@ -897,8 +882,8 @@ p {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: var(--chip);
-  color: var(--ledger);
+  background: var(--ledger);
+  color: var(--ledger-ink);
   font-size: 1.5rem;
   font-weight: 700;
 }
