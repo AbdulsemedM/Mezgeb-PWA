@@ -1,4 +1,6 @@
 import type { ReactElement } from 'react';
+import { BookScreen } from '../features/book/BookScreen';
+import { EntryScreen } from '../features/book/EntryScreen';
 import { HomeScreen } from '../features/home/HomeScreen';
 import { InstalledScreen } from '../features/install/InstalledScreen';
 import { InstallScreen } from '../features/install/InstallScreen';
@@ -6,6 +8,7 @@ import { InviteScreen } from '../features/invite/InviteScreen';
 import { InvitesScreen } from '../features/invites/InvitesScreen';
 import { TermsScreen } from '../features/invites/TermsScreen';
 import { CalendarScreen } from '../features/signin/CalendarScreen';
+import { SettingsScreen } from '../features/settings/SettingsScreen';
 import { SignInScreen } from '../features/signin/SignInScreen';
 import { StartScreen } from '../features/start/StartScreen';
 import { RequireSession, RequireSignedIn, SignedOutOnly } from './gates';
@@ -70,6 +73,30 @@ export const routes: AppRoute[] = [
     element: (
       <RequireSession>
         <HomeScreen />
+      </RequireSession>
+    ),
+  },
+  {
+    path: '/shops/:accountId',
+    element: (
+      <RequireSession>
+        <BookScreen />
+      </RequireSession>
+    ),
+  },
+  {
+    path: '/shops/:accountId/entries/:entryId',
+    element: (
+      <RequireSession>
+        <EntryScreen />
+      </RequireSession>
+    ),
+  },
+  {
+    path: '/settings',
+    element: (
+      <RequireSession>
+        <SettingsScreen />
       </RequireSession>
     ),
   },

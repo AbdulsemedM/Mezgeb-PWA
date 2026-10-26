@@ -14,6 +14,7 @@ export { type HelpContent, HelpButton, SupportButton } from './HelpSheet';
 export { Icon, type IconName } from './Icon';
 export { LimitUsageBar, NEAR_LIMIT } from './LimitUsageBar';
 export { Screen } from './Screen';
+export { Chips, Segmented } from './Segmented';
 export { Sheet } from './Sheet';
 export { StatusPill } from './StatusPill';
 export { SuccessFeedbackProvider, useSuccess } from './SuccessFeedback';

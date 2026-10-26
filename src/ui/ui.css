@@ -309,11 +309,15 @@ p {
 }
 
 .amount--large {
-  font-size: 1.625rem;
+  font-size: min(1.625rem, 9vw);
+  white-space: normal;
 }
 
+/* At 200% text a big balance would not fit: it may wrap between "ETB" and the number, and is
+   capped by the screen width, so it never runs off the side (MOB-002 §2). */
 .amount--balance {
-  font-size: 2.125rem;
+  font-size: min(2.125rem, 11vw);
+  white-space: normal;
 }
 
 /* ---- Cards, lists, tiles ---- */
@@ -667,6 +671,8 @@ p {
 
 .row--between {
   justify-content: space-between;
+  /* Label and amount side by side, one under the other at large text (MOB-002 §2). */
+  flex-wrap: wrap;
 }
 
 .stack {
@@ -740,4 +746,88 @@ p {
 
 .code-boxes__box--next {
   border-color: var(--ledger);
+}
+
+/* ---- Segmented choice and filter chips ---- */
+
+.segmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius);
+  background: var(--chip);
+}
+
+.segmented__option {
+  min-height: var(--tap);
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.segmented__option[aria-checked='true'] {
+  background: var(--surface);
+  color: var(--ledger);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.15);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+}
+
+.chip {
+  min-height: var(--tap);
+  min-width: var(--tap);
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 2px solid var(--rule);
+  background: var(--surface);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chip[aria-pressed='true'] {
+  border-color: var(--ledger);
+  background: var(--ledger-soft);
+  color: var(--ink);
+}
+
+/* ---- Dube book rows ---- */
+
+.entry {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  min-height: var(--tap);
+  padding: 12px var(--gutter);
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.entry__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.entry__amount--credit {
+  color: var(--good);
+}
+
+.pull {
+  text-align: center;
+  color: var(--ink2);
+  overflow: hidden;
+  transition: height 0.15s;
 }

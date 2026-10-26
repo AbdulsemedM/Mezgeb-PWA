@@ -112,8 +112,8 @@ export default defineConfig({
       },
       manifest: {
         id: '/',
-        name: 'Mezgeb',
-        short_name: 'Mezgeb',
+        name: 'Nota',
+        short_name: 'Nota',
         description: 'Your dube book with your shops',
         lang: 'am',
         start_url: '/',
@@ -139,11 +139,14 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
+    // VS Code dev tunnels (https://<id>-<port>.<region>.devtunnels.ms) for testing on a phone.
+    allowedHosts: ['.devtunnels.ms'],
     // Same origin in development: the refresh cookie (Path=/v1/auth) just works.
     proxy: { '/v1': { target: devApi, changeOrigin: false } },
   },
   preview: {
     port: 4173,
+    allowedHosts: ['.devtunnels.ms'],
     proxy: { '/v1': { target: devApi, changeOrigin: false } },
   },
   build: {
