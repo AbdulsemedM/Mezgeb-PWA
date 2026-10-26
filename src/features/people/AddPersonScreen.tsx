@@ -1,7 +1,7 @@
 import { normalizeEthiopianPhone } from '@shared/phone';
 import { uuidv7 } from '@shared/uuid';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from '../../app/router';
 import type { Representative } from '../../data/book';
 import { enqueue, savedText } from '../../data/queue';
 import { useI18n } from '../../i18n';

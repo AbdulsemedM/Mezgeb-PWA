@@ -1,6 +1,6 @@
 import { uuidv7 } from '@shared/uuid';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router';
+import { useNavigate, useParams, useSearchParams } from '../../app/router';
 import type { PaymentMethod, PaymentReport } from '../../data/book';
 import { enqueue, savedText } from '../../data/queue';
 import { useI18n } from '../../i18n';

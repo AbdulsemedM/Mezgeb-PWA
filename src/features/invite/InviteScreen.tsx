@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from '../../app/router';
 import { useI18n } from '../../i18n';
 import { BigButton, CalmBanner, EmptyState, ErrorPanel, Screen, SupportButton } from '../../ui';
 import { isStandalone } from '../install/install-prompt';

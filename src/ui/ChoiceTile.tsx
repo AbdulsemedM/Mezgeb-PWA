@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router';
+import { Link } from '../app/router';
 import { Icon, type IconName } from './Icon';
 
 /**

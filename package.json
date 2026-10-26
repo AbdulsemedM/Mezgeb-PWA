@@ -20,12 +20,12 @@
     "size": "node scripts/check-size.mjs",
     "font:subset": "node scripts/subset-font.mjs",
     "icons": "node scripts/make-icons.mjs",
-    "sync:shared": "node scripts/sync-shared.mjs"
+    "sync:shared": "node scripts/sync-shared.mjs",
+    "strings:export": "node scripts/export-strings.mjs"
   },
   "dependencies": {
     "idb": "8.0.4",
     "preact": "^10.29.8",
-    "react-router": "7.18.4",
     "workbox-expiration": "7.4.1",
     "workbox-precaching": "7.4.1",
     "workbox-routing": "7.4.1",

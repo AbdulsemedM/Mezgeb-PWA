@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { Navigate } from 'react-router';
+import { Navigate } from './router';
 import { useSession } from '../auth/useSession';
 
 /** While the saved session is read (a few ms from IndexedDB): the paper colour, nothing else. */

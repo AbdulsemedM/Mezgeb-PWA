@@ -1,4 +1,5 @@
 /// <reference types="vitest/config" />
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import preact from '@preact/preset-vite';
 import { defineConfig, type Plugin } from 'vite';
@@ -76,6 +77,31 @@ function inlineEntry(): Plugin {
         }
       }
       page.source = html;
+
+      // The inline script must be allowed by the host's Content-Security-Policy: write the
+      // header value with its hash (docs/deployment.md). Style attributes need 'unsafe-inline'.
+      const scripts = [...html.matchAll(/<script type="module">([\s\S]*?)<\/script>/g)].map(
+        (m) => `'sha256-${createHash('sha256').update(m[1]!).digest('base64')}'`,
+      );
+      const api = process.env.VITE_API_URL ? new URL(process.env.VITE_API_URL).origin : '';
+      this.emitFile({
+        type: 'asset',
+        fileName: 'csp.txt',
+        source:
+          [
+            "default-src 'self'",
+            `script-src 'self' ${scripts.join(' ')}`,
+            "style-src 'self' 'unsafe-inline'",
+            "img-src 'self' blob: data:",
+            "font-src 'self'",
+            `connect-src 'self'${api ? ` ${api}` : ''}`,
+            "manifest-src 'self'",
+            "worker-src 'self'",
+            "frame-ancestors 'none'",
+            "base-uri 'none'",
+            "form-action 'none'",
+          ].join('; ') + '\n',
+      });
     },
   };
 }
@@ -97,7 +123,7 @@ export default defineConfig({
   plugins: [
     // Preact behind the React API (WEB-001 budget): `react` imports resolve to preact/compat.
     preact(),
-    inlineEntry(),
+    ...(process.env.ANALYZE ? [] : [inlineEntry()]),
     assetLinks(),
     VitePWA({
       strategies: 'injectManifest',
@@ -150,6 +176,22 @@ export default defineConfig({
     proxy: { '/v1': { target: devApi, changeOrigin: false } },
   },
   build: {
+    // `ANALYZE=1 pnpm exec vite build`: no inlining, one chunk per part, to see what weighs.
+    ...(process.env.ANALYZE && {
+      rolldownOptions: {
+        output: {
+          advancedChunks: {
+            groups: [
+              { name: 'preact', test: /node_modules[/\\].*preact/ },
+              { name: 'idb', test: /node_modules[/\\].*idb/ },
+              { name: 'workbox', test: /node_modules[/\\].*workbox/ },
+              { name: 'i18n', test: /src[/\\]i18n[/\\](am|en|om)\.ts/ },
+              { name: 'shared', test: /src[/\\]shared/ },
+            ],
+          },
+        },
+      },
+    }),
     target: 'es2020',
     sourcemap: true,
     manifest: true,
@@ -160,14 +202,6 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}'],
     // Screen tests tap through whole flows; 5 s is too tight on a busy CI machine.
     testTimeout: 15_000,
-    // Node would pick react-router's CommonJS build, whose require('react') skips the
-    // preact/compat alias: use its ES module build and run it through Vite.
-    alias: {
-      'react-router': fileURLToPath(
-        new URL('./node_modules/react-router/dist/development/index.mjs', import.meta.url),
-      ),
-    },
-    server: { deps: { inline: [/react-router/] } },
     css: false,
   },
 });

@@ -97,3 +97,14 @@ No UI framework; a small component kit implementing ADR-005, mirroring the Flutt
   accessibility ≥ 95.
 - **Font**: the subset holds the Ethiopic characters of the app's own Amharic text (~21 KB per
   weight, `pnpm font:subset`); names people type fall back to the phone's Ethiopic system font.
+- **Own router instead of react-router** (W9, decided with the product owner): after W8 the first
+  screen took 4.1–4.5 s on Slow 3G and react-router was 14 KB of the 74 KB. `src/app/router.tsx`
+  (about 150 lines, react-router's names: Routes, Route, Link, Navigate, useNavigate, useParams,
+  useSearchParams, useLocation) brought it to 62 KB and 3.6–3.8 s.
+- **What weighs** (`ANALYZE=1 pnpm exec vite build`, gzip): app code ~29 KB, the three string
+  catalogues ~17 KB, Preact ~8 KB, workbox/idb/shared ~6 KB. Loading only the active language
+  would not help the first screen: on Slow 3G any extra request costs a 2 s round trip.
+  Route-level code splitting does not mix with the inlined entry (lazy chunks would load a
+  second copy of Preact).
+- **Content-Security-Policy**: the build writes the header value with the inline script's hash
+  to `dist/csp.txt` (`docs/deployment.md`); `e2e/csp.spec.ts` proves the app runs under it.

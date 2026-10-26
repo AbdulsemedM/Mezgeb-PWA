@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useParams } from 'react-router';
+import { Link, useParams } from '../../app/router';
 import { api } from '../../api/client';
 import { type Book, type Entry, fetchBook, type Representative } from '../../data/book';
 import { useCached } from '../../data/use-cached';

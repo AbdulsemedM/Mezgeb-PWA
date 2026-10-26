@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from '../../app/router';
 import type { Order } from '../../data/book';
 import { enqueue, savedText, useQueued } from '../../data/queue';
 import { type MessageKey, useI18n } from '../../i18n';

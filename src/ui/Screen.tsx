@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from '../app/router';
 import { useT } from '../i18n';
 import { type HelpContent, HelpButton } from './HelpSheet';
 import { Icon } from './Icon';

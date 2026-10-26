@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from '../../app/router';
 import { OfflineError } from '../../api/client';
 import { updateMe } from '../../auth/session';
 import { useI18n } from '../../i18n';

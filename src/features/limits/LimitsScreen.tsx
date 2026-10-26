@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from '../../app/router';
 import type { LimitSetting } from '../../data/book';
 import { enqueue, savedText, useQueued } from '../../data/queue';
 import { useI18n } from '../../i18n';

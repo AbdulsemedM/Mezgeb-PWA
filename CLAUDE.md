@@ -28,6 +28,8 @@ Node 22, pnpm 10. The backend repo is expected at `../backend` (shared code, loc
 - `pnpm lint`, `pnpm typecheck` (app, service worker, Node configs), `pnpm format`.
 - `pnpm sync:shared` — copy the backend's shared code after it changes. Never edit `src/shared`.
 - `pnpm font:subset` — after changing `src/i18n/am.ts` (a test fails otherwise). `pnpm icons`.
+- `pnpm strings:export` — `docs/i18n-review.csv` for the native-speaker review.
+- Deploying: `docs/deployment.md` (env, host headers, the CSP in `dist/csp.txt`).
 - Live check against a real local API (not in CI): run the API (`../backend`, `OTP_FIXED_CODE` set),
   `MEZGEB_DEV_API=http://localhost:8000 pnpm dev`, then
   `node e2e/live/us02-live.mjs "$(node e2e/live/seed-invite.mjs)"`. It writes test data to the
@@ -35,6 +37,7 @@ Node 22, pnpm 10. The backend repo is expected at `../backend` (shared code, loc
 
 ## Patterns
 - Runtime is Preact behind the React API: import from `react`, test with `@testing-library/preact`.
+  Routing is our own `src/app/router.tsx` (react-router's names); never add react-router back.
 - UI kit in `src/ui/` (Screen, BigButton, Sheet, ConfirmSheet, HelpButton, CalmBanner, ErrorPanel,
   EmptyState, ChoiceTile, TextField, AmountText, AmountKeypad/NumberPad, LimitUsageBar,
   StatusPill, useSuccess). Strings: `useT()` keys in `src/i18n/en.ts` (am/om must have every key;
@@ -45,5 +48,10 @@ Node 22, pnpm 10. The backend repo is expected at `../backend` (shared code, loc
 - Routes in `src/app/routes.tsx`, wrapped in gates (`src/app/gates.tsx`): `RequireSession`
   (signed in with a calendar), `RequireSignedIn`, `SignedOutOnly`. `useLoad(fn, deps)` loads data
   with `loading | ready | offline | error`; offline shows a CalmBanner, never an error.
+- Writes go through the queue (`src/data/queue.ts`: `enqueue`, `useQueued`, `QueueNotice`,
+  `savedText`), each create with its client `uuidv7()`; a write is sent only while its person is
+  signed in. Kinds per feature (`LIMIT_KINDS`, `REP_KINDS`, `PAY_KINDS`, `ORDER_KINDS`, …).
+- e2e: `fakeApi(page, { ...shopRoutes(), … })` then `seedSession(page)` (`e2e/session.ts`);
+  `e2e/a11y.spec.ts` runs axe on every screen: add new screens to its list.
 - Unit tests render the whole app with `renderApp(path)` and fake the API with
   `fakeFetch({'GET /v1/...': handler})` (`src/test/render.tsx`); e2e uses `fakeApi(page, …)`.

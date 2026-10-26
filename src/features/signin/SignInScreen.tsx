@@ -1,6 +1,6 @@
 import { normalizeEthiopianPhone } from '@shared/phone';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from '../../app/router';
 import { ApiError, OfflineError } from '../../api/client';
 import { requestCode, updateMe, verifyCode } from '../../auth/session';
 import { dropOthersWrites, flush } from '../../data/queue';

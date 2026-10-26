@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router';
+import { Navigate, useNavigate } from '../../app/router';
 import { useT } from '../../i18n';
 import { BigButton, CalmBanner, Screen } from '../../ui';
 import {

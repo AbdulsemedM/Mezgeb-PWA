@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from '../../app/router';
 import { signOut, updateMe } from '../../auth/session';
 import { useSession } from '../../auth/useSession';
 import { type Language, useI18n } from '../../i18n';

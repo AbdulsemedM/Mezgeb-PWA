@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
+import { BrowserRouter, Navigate, Route, Routes } from './router';
 import { I18nProvider } from '../i18n';
 import { SuccessFeedbackProvider } from '../ui';
 import { routes } from './routes';

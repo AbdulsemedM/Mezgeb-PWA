@@ -1,6 +1,6 @@
 import { render } from '@testing-library/preact';
 import { useEffect } from 'react';
-import { MemoryRouter, useLocation } from 'react-router';
+import { MemoryRouter, useLocation } from '../app/router';
 import { vi } from 'vitest';
 import { AppRoutes } from '../app/App';
 import { I18nProvider, type Language } from '../i18n';

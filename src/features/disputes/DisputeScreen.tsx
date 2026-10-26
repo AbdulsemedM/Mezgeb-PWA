@@ -1,6 +1,6 @@
 import { uuidv7 } from '@shared/uuid';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from '../../app/router';
 import { enqueue, savedText } from '../../data/queue';
 import { type MessageKey, useI18n } from '../../i18n';
 import { BigButton, ChoiceTile, Icon, Screen, TextField, useSuccess } from '../../ui';

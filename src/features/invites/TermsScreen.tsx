@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router';
+import { Navigate, useNavigate, useParams } from '../../app/router';
 import { ApiError, OfflineError } from '../../api/client';
 import { acceptInvite, listMyAccounts } from '../../data/accounts';
 import { useT } from '../../i18n';

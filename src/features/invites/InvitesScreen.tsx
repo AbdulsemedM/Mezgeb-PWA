@@ -1,4 +1,4 @@
-import { Navigate, useNavigate } from 'react-router';
+import { Navigate, useNavigate } from '../../app/router';
 import { signOut } from '../../auth/session';
 import { useSession } from '../../auth/useSession';
 import { listMyAccounts, type MyAccount, shopPlace } from '../../data/accounts';

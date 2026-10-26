@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/preact';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter } from '../app/router';
 import { describe, expect, it, vi } from 'vitest';
 import { I18nProvider } from '../i18n';
 import { backspace, inputSantim, pressKey, santimToInput } from './amount-input';

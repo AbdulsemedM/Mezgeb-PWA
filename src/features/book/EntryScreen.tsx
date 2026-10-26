@@ -1,4 +1,4 @@
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useParams } from '../../app/router';
 import { useI18n } from '../../i18n';
 import { formatAmount } from '../../lib/money';
 import { displayInstantDate } from '../../lib/dates';

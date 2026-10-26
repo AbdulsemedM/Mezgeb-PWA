@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link } from '../../app/router';
 import { shopPlace } from '../../data/accounts';
 import { fetchHome, type HomeData, type PaymeRequest } from '../../data/book';
 import { useCached } from '../../data/use-cached';
