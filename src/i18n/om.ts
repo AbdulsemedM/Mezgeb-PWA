@@ -406,6 +406,8 @@ export const om: Messages = {
   statementFailed:
     'Nota ibsa qopheessuu hin dandeenye. Irra deebi’ii yaali, ykn deeggarsa Nota bilbili.',
   statementReady: 'Ibsi qophaa’eera.',
+  signOutUnsent:
+    '{count, plural, =1{Jijjiiramni 1 ammallee hin ergamne. Ba’uun ni haqa. Ta’us ni baataa?} other{Jijjiiramni # ammallee hin ergamne. Ba’uun ni haqa. Ta’us ni baataa?}}',
   homeTitle: 'Suuqiiwwan koo',
   settingsTitle: "Qindaa'ina",
 };

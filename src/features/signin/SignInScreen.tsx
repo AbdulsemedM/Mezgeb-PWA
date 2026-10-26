@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { ApiError, OfflineError } from '../../api/client';
 import { requestCode, updateMe, verifyCode } from '../../auth/session';
+import { dropOthersWrites, flush } from '../../data/queue';
 import { type Translate, useI18n } from '../../i18n';
 import { BigButton, CalmBanner, CodeBoxes, Icon, NumberPad, PhoneDisplay, Screen } from '../../ui';
 import { displayPhone, formatPhoneDigits, pressPhoneDigit } from './phone-digits';
@@ -48,6 +49,10 @@ export function SignInScreen() {
       setNotice(null);
       try {
         const { user } = await verifyCode(phone, typed);
+        // Writes left by someone else on this phone are never sent as this person; this
+        // person's own unsent writes (a session that ended on its own) go out now.
+        await dropOthersWrites(user.id);
+        void flush();
         // The language chosen here follows the person to SMS and the app.
         if (user.language !== language) void updateMe({ language }).catch(() => undefined);
         navigate(user.calendar_pref ? '/invites' : '/setup/calendar', { replace: true });

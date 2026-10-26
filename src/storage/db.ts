@@ -8,6 +8,8 @@ import { type DBSchema, type IDBPDatabase, openDB } from 'idb';
 export interface QueuedWrite {
   /** The client UUID the server is idempotent on (CLAUDE.md rule 4). */
   id: string;
+  /** Whose write it is: only sent while that person is signed in on this phone. */
+  userId?: string;
   /** What it is, for the screens that show it as "waiting to send". */
   kind: string;
   method: 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -68,13 +70,17 @@ export async function cacheSet(key: string, data: unknown, savedAt = new Date())
   await (await db()).put('cache', { data, savedAt: savedAt.toISOString() }, key);
 }
 
-/** Signing out on a shared phone removes the person's data (not the device key). */
-export async function clearPersonalData(): Promise<void> {
+/**
+ * Signing out on a shared phone removes the person's data (not the device key). A session that
+ * ended on its own (the 60-day refresh expired, the device was revoked) keeps the unsent writes:
+ * they go out when the same person signs in again (`keepQueue`).
+ */
+export async function clearPersonalData(opts: { keepQueue?: boolean } = {}): Promise<void> {
   const d = await db();
   const tx = d.transaction(['cache', 'queue', 'kv'], 'readwrite');
   await Promise.all([
     tx.objectStore('cache').clear(),
-    tx.objectStore('queue').clear(),
+    opts.keepQueue ? Promise.resolve() : tx.objectStore('queue').clear(),
     tx.objectStore('kv').delete('session'),
     tx.done,
   ]);

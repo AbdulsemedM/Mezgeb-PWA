@@ -397,6 +397,8 @@ export const en = {
   statementOffline: 'You need internet to make a statement. Connect, then try again.',
   statementFailed: 'Nota could not make the statement. Try again, or call Nota support.',
   statementReady: 'The statement is ready.',
+  signOutUnsent:
+    '{count, plural, =1{1 change is not sent yet. Signing out removes it. Sign out anyway?} other{# changes are not sent yet. Signing out removes them. Sign out anyway?}}',
   homeTitle: 'My shops',
   settingsTitle: 'Settings',
 } satisfies Record<string, string>;

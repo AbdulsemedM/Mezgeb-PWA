@@ -1,6 +1,7 @@
 import { uuidv7 } from '@shared/uuid';
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { api, ApiError, OfflineError } from '../api/client';
+import { sessionState } from '../auth/session';
 import type { Translate } from '../i18n';
 import { db, type QueuedWrite } from '../storage/db';
 
@@ -34,8 +35,10 @@ export function invalidate(key: string): void {
 export async function enqueue(
   write: Omit<QueuedWrite, 'id' | 'createdAt' | 'attempts'>,
 ): Promise<QueuedWrite> {
+  const session = sessionState();
   const item: QueuedWrite = {
     ...write,
+    ...(session.status === 'signed-in' && { userId: session.user.id }),
     id: uuidv7(),
     createdAt: new Date().toISOString(),
     attempts: 0,
@@ -77,6 +80,11 @@ export function flush(): Promise<void> {
 async function sendWaiting(): Promise<boolean> {
   for (const item of await queuedWrites()) {
     if (item.failed) continue;
+    // Checked before each send: someone else's write, left from before they were signed out,
+    // is never sent as the person signed in now.
+    const session = sessionState();
+    if (session.status !== 'signed-in') return false;
+    if (item.userId && item.userId !== session.user.id) continue;
     try {
       await api(
         item.method,
@@ -115,6 +123,15 @@ export function savedText(t: Translate, done: string): string {
   return typeof navigator !== 'undefined' && navigator.onLine === false ? t('offlineSaved') : done;
 }
 
+/** A different person signed in on this phone: drop what earlier people left unsent. */
+export async function dropOthersWrites(userId: string): Promise<void> {
+  const d = await db();
+  for (const w of await queuedWrites()) {
+    if (w.userId && w.userId !== userId) await d.delete('queue', w.id);
+  }
+  changed();
+}
+
 /** Forgets a refused write (the person saw it). */
 export async function dismiss(id: string): Promise<void> {
   await (await db()).delete('queue', id);
@@ -130,8 +147,8 @@ export function startQueue(): void {
   });
 }
 
-/** The waiting writes of some kinds, kept up to date. */
-export function useQueued(kinds: string[]): QueuedWrite[] {
+/** The waiting writes of some kinds (all with null), kept up to date. */
+export function useQueued(kinds: string[] | null): QueuedWrite[] {
   const v = useSyncExternalStore(
     (l) => {
       listeners.add(l);
@@ -140,11 +157,11 @@ export function useQueued(kinds: string[]): QueuedWrite[] {
     () => version,
   );
   const [items, setItems] = useState<QueuedWrite[]>([]);
-  const key = kinds.join(',');
+  const key = kinds === null ? '*' : kinds.join(',');
   useEffect(() => {
     let live = true;
     void queuedWrites().then((all) => {
-      if (live) setItems(all.filter((w) => key.split(',').includes(w.kind)));
+      if (live) setItems(key === '*' ? all : all.filter((w) => key.split(',').includes(w.kind)));
     });
     return () => {
       live = false;

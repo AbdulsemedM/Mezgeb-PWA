@@ -384,6 +384,8 @@ export const am: Messages = {
   statementOffline: 'መግለጫ ለማዘጋጀት ኢንተርኔት ያስፈልጋል። ይገናኙና እንደገና ይሞክሩ።',
   statementFailed: 'ኖታ መግለጫውን ማዘጋጀት አልቻለም። እንደገና ይሞክሩ ወይም የኖታ ድጋፍን ይደውሉ።',
   statementReady: 'መግለጫው ዝግጁ ነው።',
+  signOutUnsent:
+    '{count, plural, =1{1 ለውጥ ገና አልተላከም። መውጣት ያጠፋዋል። ቢሆንም ይውጡ?} other{# ለውጦች ገና አልተላኩም። መውጣት ያጠፋቸዋል። ቢሆንም ይውጡ?}}',
   homeTitle: 'ሱቆቼ',
   settingsTitle: 'ቅንብሮች',
 };

@@ -124,18 +124,20 @@ export async function updateMe(
   return user;
 }
 
+/** The person chose to sign out: everything of theirs leaves this phone, unsent writes too. */
 export async function signOut(): Promise<void> {
   try {
     await api('POST', '/v1/auth/logout');
   } catch {
     // Offline or already signed out: the local data goes anyway.
   }
-  await endSession();
+  await endSession({ keepQueue: false });
 }
 
-async function endSession(): Promise<void> {
+/** The server ended the session: keep unsent writes for when this person signs in again. */
+async function endSession(opts: { keepQueue: boolean } = { keepQueue: true }): Promise<void> {
   access = null;
-  await clearPersonalData();
+  await clearPersonalData(opts);
   setState({ status: 'signed-out' });
 }
 

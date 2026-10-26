@@ -1,10 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { forgetDeviceForTests } from '../auth/device-key';
-import { resetSessionForTests, restoreSession } from '../auth/session';
+import { resetSessionForTests, restoreSession, sessionState, signOut } from '../auth/session';
 import { resetDbForTests } from '../storage/db';
 import { signedIn, TOKENS } from '../test/fixtures';
 import { fakeFetch, json } from '../test/render';
-import { enqueue, flush, onInvalidate, queuedWrites, resetQueueForTests } from './queue';
+import {
+  dropOthersWrites,
+  enqueue,
+  flush,
+  onInvalidate,
+  queuedWrites,
+  resetQueueForTests,
+} from './queue';
 
 describe('write queue (CLAUDE.md rule 5)', () => {
   beforeEach(async () => {
@@ -95,5 +102,77 @@ describe('write queue (CLAUDE.md rule 5)', () => {
     await enqueue(write(2));
     await flush();
     expect((await queuedWrites()).map((w) => w.failed)).toEqual([undefined, undefined]);
+  });
+});
+
+describe('queue across sessions (W9 edge cases)', () => {
+  beforeEach(async () => {
+    await resetDbForTests();
+    forgetDeviceForTests();
+    resetSessionForTests();
+    resetQueueForTests();
+    await signedIn();
+    await restoreSession();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  const write = {
+    kind: 'rep.create',
+    method: 'POST' as const,
+    path: '/v1/accounts/acc-1/representatives',
+    body: { id: 'rep-1', name: 'Selam' },
+  };
+
+  it('each write remembers whose it is', async () => {
+    fakeFetch({});
+    await enqueue(write);
+    expect((await queuedWrites())[0]!.userId).toBe('u1');
+  });
+
+  it('a session the server ended keeps the unsent writes for the same person', async () => {
+    fakeFetch({ 'POST /v1/auth/web/refresh': () => json(401, { code: 'refresh_expired' }) });
+    await enqueue(write);
+    await flush();
+    expect(sessionState().status).toBe('signed-out');
+    expect(await queuedWrites()).toHaveLength(1);
+
+    // The same person signs in again: the write goes out.
+    await signedIn();
+    resetSessionForTests();
+    await restoreSession();
+    const api = fakeFetch({
+      'POST /v1/auth/web/refresh': () => json(200, TOKENS),
+      'POST /v1/accounts/:id/representatives': () => json(201, {}),
+    });
+    await flush();
+    expect(api.calls.some((c) => c.path.endsWith('/representatives'))).toBe(true);
+    expect(await queuedWrites()).toEqual([]);
+  });
+
+  it('never sends someone else’s write; a new person drops them', async () => {
+    fakeFetch({});
+    await enqueue(write);
+    await flush();
+    await signedIn({ id: 'u2', phone: '+251911999999' });
+    resetSessionForTests();
+    await restoreSession();
+    const api = fakeFetch({
+      'POST /v1/auth/web/refresh': () => json(200, TOKENS),
+      'POST /v1/accounts/:id/representatives': () => json(201, {}),
+    });
+    await flush();
+    expect(api.calls.some((c) => c.path.endsWith('/representatives'))).toBe(false);
+    await dropOthersWrites('u2');
+    expect(await queuedWrites()).toEqual([]);
+  });
+
+  it('signing out on purpose removes unsent writes', async () => {
+    fakeFetch({});
+    await enqueue(write);
+    await signOut();
+    expect(await queuedWrites()).toEqual([]);
   });
 });

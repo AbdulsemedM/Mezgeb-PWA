@@ -8,6 +8,7 @@ import { BigButton, CalmBanner, ChoiceTile, ConfirmSheet, Screen } from '../../u
 import { LanguagePicker } from '../start/LanguagePicker';
 import { displayPhone } from '../signin/phone-digits';
 import { disablePush, enablePush, type PushState, pushState } from '../notifications/push';
+import { useQueued } from '../../data/queue';
 
 /** Language, calendar, sign out (ADR-003: both choices can be changed later). */
 export function SettingsScreen() {
@@ -18,6 +19,8 @@ export function SettingsScreen() {
   const [offline, setOffline] = useState(false);
   const user = session.status === 'signed-in' ? session.user : null;
   const [push, setPush] = useState<PushState>(() => pushState());
+  // Signing out removes unsent changes: say so first (never lose what the person did).
+  const unsent = useQueued(null).filter((w) => !w.failed && w.kind !== 'payme.seen').length;
 
   const save = (patch: { language?: Language; calendar_pref?: CalendarPref }) => {
     setOffline(false);
@@ -69,7 +72,7 @@ export function SettingsScreen() {
       )}
       <ConfirmSheet
         open={confirm}
-        question={t('signOutConfirm')}
+        question={unsent > 0 ? t('signOutUnsent', { count: unsent }) : t('signOutConfirm')}
         confirmLabel={t('signOut')}
         onCancel={() => setConfirm(false)}
         onConfirm={() => {
