@@ -15,13 +15,16 @@ export function ChoiceTile({
   to,
   onClick,
   lang,
+  checkbox,
 }: {
   title: string;
   subtitle?: ReactNode;
   icon?: IconName;
   trailing?: ReactNode;
-  /** Makes it a radio choice. */
+  /** Makes it a radio choice (or a checkbox with `checkbox`). */
   selected?: boolean;
+  /** An on/off option instead of one-of-many. */
+  checkbox?: boolean;
   to?: string;
   onClick?: () => void;
   /** The language of the title, e.g. each language's own name. */
@@ -53,7 +56,7 @@ export function ChoiceTile({
     <button
       type="button"
       className="choice-tile"
-      role={selected === undefined ? undefined : 'radio'}
+      role={selected === undefined ? undefined : checkbox ? 'checkbox' : 'radio'}
       aria-checked={selected}
       onClick={onClick}
     >

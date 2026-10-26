@@ -74,6 +74,16 @@ export interface Representative {
   sms_receipt: boolean;
 }
 
+/** ADR-011: the shop asks to go over the customer's hard stop once (ADR-016 lists them). */
+export interface Raise {
+  id: string;
+  account_id: string;
+  amount: number;
+  status: 'pending' | 'approved' | 'used' | 'expired';
+  expires_at: string;
+  valid_until: string | null;
+}
+
 /** One shop's dube book, cached whole for offline reading (WEB-001). */
 export interface Book {
   account: MyAccount;
@@ -81,16 +91,19 @@ export interface Book {
   limits: Limits;
   payme: PaymeRequest[];
   representatives: Representative[];
+  /** Waiting raise requests; acted on online only. */
+  raises: Raise[];
 }
 
 export async function fetchBook(accountId: string): Promise<Book> {
   const base = `/v1/accounts/${accountId}`;
-  const [account, entries, limits, payme, reps] = await Promise.all([
+  const [account, entries, limits, payme, reps, raises] = await Promise.all([
     api<MyAccount>('GET', base),
     api<{ entries: Entry[] }>('GET', `${base}/entries`),
     api<Limits>('GET', `${base}/limits`),
     api<{ payme_requests: PaymeRequest[] }>('GET', `${base}/payme-requests`),
     api<{ representatives: Representative[] }>('GET', `${base}/representatives`),
+    api<{ raises: Raise[] }>('GET', `${base}/raises`),
   ]);
   return {
     account,
@@ -98,6 +111,7 @@ export async function fetchBook(accountId: string): Promise<Book> {
     limits,
     payme: payme.payme_requests,
     representatives: reps.representatives,
+    raises: raises.raises,
   };
 }
 
@@ -106,6 +120,7 @@ export interface HomeData {
   accounts: MyAccount[];
   limits: Record<string, Limits>;
   payme: PaymeRequest[];
+  raises: Raise[];
 }
 
 export async function fetchHome(): Promise<HomeData> {
@@ -113,16 +128,18 @@ export async function fetchHome(): Promise<HomeData> {
   const open = accounts.filter((a) => a.status === 'active' || a.status === 'paused');
   const perShop = await Promise.all(
     open.map(async (a) => {
-      const [limits, payme] = await Promise.all([
+      const [limits, payme, raises] = await Promise.all([
         api<Limits>('GET', `/v1/accounts/${a.id}/limits`),
         api<{ payme_requests: PaymeRequest[] }>('GET', `/v1/accounts/${a.id}/payme-requests`),
+        api<{ raises: Raise[] }>('GET', `/v1/accounts/${a.id}/raises`),
       ]);
-      return { id: a.id, limits, payme: payme.payme_requests };
+      return { id: a.id, limits, payme: payme.payme_requests, raises: raises.raises };
     }),
   );
   return {
     accounts,
     limits: Object.fromEntries(perShop.map((s) => [s.id, s.limits])),
     payme: perShop.flatMap((s) => s.payme),
+    raises: perShop.flatMap((s) => s.raises),
   };
 }

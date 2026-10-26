@@ -831,3 +831,13 @@ p {
   overflow: hidden;
   transition: height 0.15s;
 }
+
+/* An unchecked on/off tile shows an empty box where the check goes. */
+.choice-tile[role='checkbox'][aria-checked='false'] .choice-tile__trailing::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--ink3);
+  border-radius: 6px;
+}

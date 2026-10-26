@@ -5,7 +5,20 @@ import { type Book, type Entry, fetchBook, type Representative } from '../../dat
 import { useCached } from '../../data/use-cached';
 import { useI18n } from '../../i18n';
 import { formatAmount } from '../../lib/money';
-import { AmountText, Chips, EmptyState, Icon, Screen, Segmented, StatusPill } from '../../ui';
+import {
+  AmountText,
+  ChoiceTile,
+  Chips,
+  EmptyState,
+  Icon,
+  Screen,
+  Segmented,
+  StatusPill,
+} from '../../ui';
+import { LIMIT_KINDS } from '../limits/LimitsScreen';
+import { openRaises, RaiseCard } from '../limits/RaiseCard';
+import { REP_KINDS } from '../people/PeopleScreen';
+import { QueueNotice } from './QueueNotice';
 import {
   balanceEffect,
   entryDate,
@@ -67,7 +80,12 @@ export function BookScreen() {
       title={book?.account.shop.name ?? t('ledgerTitle')}
       back="/"
       help={{ title: t('ledgerTitle'), body: t('bookHelpBody') }}
-      banner={<Freshness cached={cached} />}
+      banner={
+        <>
+          <Freshness cached={cached} />
+          <QueueNotice kinds={[...LIMIT_KINDS, ...REP_KINDS]} />
+        </>
+      }
     >
       <PullIndicator pull={pull} />
       {book === undefined && cached.refreshing && (
@@ -82,6 +100,28 @@ export function BookScreen() {
             <AmountText santim={book.account.balance_santim} size="balance" />
             <LimitBlock balance={book.account.balance_santim} limits={book.limits} />
           </section>
+
+          {openRaises(book.raises).map((r) => (
+            <RaiseCard
+              key={r.id}
+              raise={r}
+              shop={book.account.shop.name}
+              onDone={() => void cached.refresh()}
+            />
+          ))}
+
+          <nav className="list" aria-label={book.account.shop.name}>
+            <ChoiceTile
+              title={t('bookActionLimits')}
+              icon="settings"
+              to={`/shops/${accountId}/limits`}
+            />
+            <ChoiceTile
+              title={t('bookActionPeople')}
+              icon="people"
+              to={`/shops/${accountId}/people`}
+            />
+          </nav>
 
           <h2 className="title">{t('ledgerTitle')}</h2>
           <Segmented

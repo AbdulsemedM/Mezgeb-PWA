@@ -5,6 +5,9 @@ import { HomeScreen } from '../features/home/HomeScreen';
 import { InstalledScreen } from '../features/install/InstalledScreen';
 import { InstallScreen } from '../features/install/InstallScreen';
 import { InviteScreen } from '../features/invite/InviteScreen';
+import { LimitsScreen } from '../features/limits/LimitsScreen';
+import { AddPersonScreen } from '../features/people/AddPersonScreen';
+import { PeopleScreen } from '../features/people/PeopleScreen';
 import { InvitesScreen } from '../features/invites/InvitesScreen';
 import { TermsScreen } from '../features/invites/TermsScreen';
 import { CalendarScreen } from '../features/signin/CalendarScreen';
@@ -97,6 +100,30 @@ export const routes: AppRoute[] = [
     element: (
       <RequireSession>
         <SettingsScreen />
+      </RequireSession>
+    ),
+  },
+  {
+    path: '/shops/:accountId/limits',
+    element: (
+      <RequireSession>
+        <LimitsScreen />
+      </RequireSession>
+    ),
+  },
+  {
+    path: '/shops/:accountId/people',
+    element: (
+      <RequireSession>
+        <PeopleScreen />
+      </RequireSession>
+    ),
+  },
+  {
+    path: '/shops/:accountId/people/new',
+    element: (
+      <RequireSession>
+        <AddPersonScreen />
       </RequireSession>
     ),
   },

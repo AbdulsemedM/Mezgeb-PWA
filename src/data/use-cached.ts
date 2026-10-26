@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ApiError, OfflineError } from '../api/client';
 import { cacheGet, cacheSet } from '../storage/db';
+import { onInvalidate } from './queue';
 
 export interface Cached<T> {
   /** The last data seen: from the network or, until it answers, from this phone. */
@@ -69,10 +70,15 @@ export function useCached<T>(key: string, fetcher: () => Promise<T>): Cached<T> 
       if (document.visibilityState === 'visible') void refresh();
     };
     window.addEventListener('online', again);
+    // A queued write for this data was accepted: show the server's copy.
+    const offInvalidate = onInvalidate((k) => {
+      if (k === key) void refresh();
+    });
     document.addEventListener('visibilitychange', again);
     return () => {
       live = false;
       window.removeEventListener('online', again);
+      offInvalidate();
       document.removeEventListener('visibilitychange', again);
     };
   }, [key, refresh]);

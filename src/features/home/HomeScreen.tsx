@@ -15,6 +15,7 @@ import {
   usePullToRefresh,
 } from '../book/common';
 import { isStandalone } from '../install/install-prompt';
+import { openRaises, RaiseCard } from '../limits/RaiseCard';
 
 /** Pay-me requests still waiting for the customer (PAY-1). */
 export const OPEN_PAYME: PaymeRequest['status'][] = ['sent', 'seen', 'partially_paid'];
@@ -49,6 +50,15 @@ export function HomeScreen() {
           <BigButton label={t('invitedBannerAction')} to="/invites" />
         </section>
       )}
+
+      {openRaises(data?.raises ?? []).map((r) => (
+        <RaiseCard
+          key={r.id}
+          raise={r}
+          shop={data!.accounts.find((a) => a.id === r.account_id)?.shop.name ?? ''}
+          onDone={() => void cached.refresh()}
+        />
+      ))}
 
       {asks.map((p) => {
         const shop = data!.accounts.find((a) => a.id === p.account_id)!;

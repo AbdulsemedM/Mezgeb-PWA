@@ -1,5 +1,5 @@
 import type { MyAccount } from '../data/accounts';
-import type { Entry, Limits, PaymeRequest, Representative } from '../data/book';
+import type { Entry, Limits, PaymeRequest, Raise, Representative } from '../data/book';
 import { kvSet } from '../storage/db';
 import { json } from './render';
 
@@ -145,6 +145,7 @@ export function shopsApi(
     entries?: Entry[];
     payme?: PaymeRequest[];
     reps?: Representative[];
+    raises?: Raise[];
   }[],
 ) {
   const find = (path: string) => shops.find((s) => path.includes(`/accounts/${s.account.id}`))!;
@@ -161,5 +162,7 @@ export function shopsApi(
     'GET /v1/accounts/:id/representatives': ({ path }: { path: string }) =>
       json(200, { representatives: find(path).reps ?? [] }),
     'PATCH /v1/accounts/:id': ({ path }: { path: string }) => json(200, find(path).account),
+    'GET /v1/accounts/:id/raises': ({ path }: { path: string }) =>
+      json(200, { raises: find(path).raises ?? [] }),
   };
 }

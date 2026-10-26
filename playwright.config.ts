@@ -9,6 +9,8 @@ export default defineConfig({
   testDir: 'e2e',
   timeout: 30_000,
   retries: process.env.CI ? 1 : 0,
+  // One at a time in CI: the Slow 3G budget test must not share the CPU with other tests.
+  workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
   use: {
     baseURL: 'http://localhost:4173',

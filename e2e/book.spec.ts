@@ -80,7 +80,25 @@ async function signedInBook(page: Page) {
     'GET /v1/accounts/:id/limits': () => ({ body: LIMITS }),
     'GET /v1/accounts/:id/entries': () => ({ body: { entries: [ENTRY] } }),
     'GET /v1/accounts/:id/payme-requests': () => ({ body: { payme_requests: [] } }),
-    'GET /v1/accounts/:id/representatives': () => ({ body: { representatives: [] } }),
+    'GET /v1/accounts/:id/representatives': () => ({
+      body: {
+        representatives: [
+          {
+            id: 'r-1',
+            account_id: 'acc-1',
+            name: 'Selam',
+            relationship: 'maid',
+            status: 'active',
+            may_order: false,
+            has_pin: true,
+            limit: null,
+            phone: null,
+            sms_receipt: false,
+          },
+        ],
+      },
+    }),
+    'GET /v1/accounts/:id/raises': () => ({ body: { raises: [] } }),
   });
   await page.goto('/start');
   await page.evaluate(async (user) => {
@@ -145,5 +163,24 @@ test.describe('W4: the dube book', () => {
     ).toBeVisible();
     await expect(page.getByRole('link', { name: /Purchase/ })).toBeVisible();
     await context.setOffline(false);
+  });
+
+  test('W5: limits, people and add-person screens at 200% with big tap targets', async ({
+    page,
+  }) => {
+    await signedInBook(page);
+    for (const [path, ready] of [
+      ['/shops/acc-1/limits', 'Save my limit'],
+      ['/shops/acc-1/people', 'Add a person'],
+      ['/shops/acc-1/people/new', 'Add this person'],
+    ] as const) {
+      await page.goto(path);
+      await expect(
+        page.getByRole('button', { name: ready }).or(page.getByRole('link', { name: ready })),
+      ).toBeVisible();
+      await expectBigTapTargets(page);
+      await setTextScale(page, 200);
+      await expectNoSidewaysOverflow(page);
+    }
   });
 });
