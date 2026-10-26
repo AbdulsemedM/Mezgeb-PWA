@@ -1,0 +1,148 @@
+import type { Messages } from './en';
+
+/**
+ * Afaan Oromoo. Keys shared with the Flutter app use its reviewed-draft text.
+ * TODO(i18n-review): strings new in the PWA are drafts; a native speaker reviews them in W9.
+ */
+export const om: Messages = {
+  appTitle: 'Mezgeb',
+  helpButton: 'Gargaarsa',
+  helpClose: 'Cufi',
+  callSupport: 'Deeggarsa Mezgeb bilbili',
+  confirmYes: 'Eeyyee, mirkaneessi',
+  confirmNo: 'Lakki',
+  goBack: "Deebi'i",
+  next: 'Itti fufi',
+  offlineSaved: "Bilbila kana irratti olkaa'ameera. Yeroo interneetiin deebi'u ni ergama.",
+  sendingNow: 'Gara Mezgeb ergaa jira…',
+  tryAgain: "Irra deebi'ii yaali",
+  errorGenericWhat: 'Rakkoon uumameera.',
+  errorGenericWhatToDo: "Interneetii kee ilaaliitii irra deebi'ii yaali.",
+  loading: "Fe'aa jira…",
+  keypadDelete: 'Lakkoofsa dhumaa haqi',
+  keypadDecimal: 'Tuqaa',
+  amountSpokenBirr: 'Qarshii {birr}',
+  amountSpokenBirrSantim: 'Qarshii {birr} fi saantima {santim}',
+  amountSpokenMinus: "hir'ina {amount}",
+  selected: 'Filatameera',
+  noInternetShowingSaved:
+    "Interneetiin hin jiru. Kan bilbila kana irratti olkaa'ame agarsiisaa jira.",
+  lastUpdated: 'Kan haaromfame {time}',
+  refresh: 'Haaromsi',
+  updateReady: "Gosti Mezgeb haaraan qophaa'eera.",
+  updateNow: 'Amma haaromsi',
+
+  languageAmharic: 'አማርኛ',
+  languageOromo: 'Afaan Oromoo',
+  languageEnglish: 'English',
+  chooseLanguageTitle: 'Afaan filadhu',
+  languageHelpBody:
+    "Mezgeb afaan kanaan si haasofsiisa. Booda Qindaa'ina keessatti jijjiiruu dandeessa.",
+  chooseCalendarTitle: 'Lakkoofsa guyyaa kam fayyadamta?',
+  calendarEthiopian: 'Lakkoofsa guyyaa Itoophiyaa',
+  calendarGregorian: 'Lakkoofsa guyyaa Awurooppaa (Gregorian)',
+  todayIs: "Har'a: {date}",
+  calendarHelpBody:
+    "Guyyaawwan Mezgeb keessatti lakkoofsa kanaan mul'atu. Booda Qindaa'ina keessatti jijjiiruu dandeessa.",
+
+  inviteTitle: '{shop} kitaaba dube kee siwajjin Mezgeb irratti qabachuu barbaada',
+  inviteBody: 'Bittaa hundaafi haftee kee ilaali. Mezgeb dhala ykn kaffaltii hin dabalu.',
+  inviteContinue: 'Itti fufi',
+  inviteHelpBody:
+    'Suuqiin bittaa kee Mezgeb irratti barreessa. Atis akkuma suuqii bilbila kee irratti ni argita.',
+  inviteChecking: 'Affeerraa kee banaa jira…',
+  inviteNotFoundTitle: 'Liinkiin kun hin hojjetu',
+  inviteNotFoundBody:
+    "SMS suuqii irraa dhufe ilaali, ykn suuqiin akka irra deebi'ee si affeeru gaafadhu.",
+  inviteExpiredTitle: 'Liinkiin affeerraa kanaa yeroon isaa darbeera',
+  inviteExpiredBody:
+    'Ammallee makamuu dandeessa. Mezgeb bilbila kee irra kaa’iitii lakkoofsa keetiin seeni.',
+  inviteAcceptedTitle: '{shop} waliin dursitee makamteetta',
+  inviteAcceptedBody: 'Kitaaba dube kee ilaaluuf Mezgeb bani.',
+  inviteClosedTitle: 'Kitaabni dube kun cufameera',
+  inviteClosedBody: 'Dogoggora jettee yoo yaadde {shop} gaafadhu.',
+  inviteOfflineBody: "Interneetiin hin jiru. Walqabsiisiitii liinkii irra deebi'ii bani.",
+  installTitle: 'Mezgeb fuula jalqabaa bilbila keetii irra kaa’i',
+  installBody:
+    'Achiis kitaaba dube kee akkuma appii kamiiyyuu tuqaa tokkoon banta. Bakka xiqqoo qofa qabata.',
+  installButton: 'Mezgeb fuula jalqabaa koo irra kaa’i',
+  installGettingReady: "Qophaa'aa jira…",
+  installContinueInBrowser: 'Biraawuzara keessatti itti fufi',
+  installHelpBody:
+    'Mezgeb akka appii hojjeta, garuu Play Store hin barbaachisu. Sekondii muraasa fudhata.',
+  installMenuTitle: 'Baafata biraawuzaraa fayyadami',
+  installMenuStep1: 'Gubbaa mirgaa irratti ⋮ tuqi.',
+  installMenuStep2: '“Install app” ykn “Add to Home screen” tuqi.',
+  installMenuStep3: '“Install” tuqi.',
+  installIphoneTitle: 'iPhone irratti',
+  installIphoneStep1: 'Furtuu qooduu (Share) gadii jiru tuqi.',
+  installIphoneStep2: '“Add to Home Screen” tuqi.',
+  installIphoneStep3: 'Gubbaa mirgaa irratti “Add” tuqi.',
+  installOtherTitle: 'Biraawuzara kee keessatti',
+  installOtherStep1: 'Baafata biraawuzaraa bani.',
+  installOtherStep2: '“Add to Home screen” ykn “Install” barbaadi.',
+  installInAppTitle: 'Mezgeb Chrome keessatti bani',
+  installInAppBody: 'Appiin kun Mezgeb fuula jalqabaa irra kaa’uu hin danda’u. Chrome ni danda’a.',
+  installOpenInChrome: 'Chrome keessatti bani',
+  installInAppIphoneBody: '⋯ ykn furtuu qooduu tuqi, achiis “Open in Safari” tuqi.',
+  installDoneTitle: 'Mezgeb fuula jalqabaa kee irra jira',
+  installDoneBody: 'Achii bani.',
+  installDoneIconAlt: 'Mallattoo Mezgeb fuula jalqabaa irratti',
+  installDismissed: 'Amma miti? Booda Mezgeb fuula jalqabaa kee irra kaa’uu dandeessa.',
+  installLater: 'Mezgeb fuula jalqabaa koo irra kaa’i',
+
+  phoneTitle: 'Lakkoofsa bilbila kee',
+  phoneHint: 'Koodii SMS-n siif ergina.',
+  phonePlaceholder: '09 __ __ __ __',
+  phoneSpoken: 'Lakkoofsa bilbilaa {digits}',
+  sendCode: 'Koodii ergi',
+  sending: 'Ergaa jira…',
+  phoneInvalid: 'Kun lakkoofsa moobaayilii Itoophiyaa miti. 09 ykn 07 n jalqaba.',
+  phoneHelpBody:
+    'Lakkoofsa bilbila kee barreessi. Koodii lakkoofsa 6 qabu SMS-n siif ergina. Jecha icciitii hin barbaachisu.',
+  codeTitle: 'Koodii galchi',
+  codeSentTo: 'Koodii lakkoofsa 6 qabu gara {phone} ergineerra.',
+  codeSpoken: 'Koodii: lakkoofsa 6 keessaa {count} barreeffameera',
+  confirmCode: 'Itti fufi',
+  checking: 'Mirkaneessaa jira…',
+  resendIn: "Sekondii {seconds} booda irra deebi'ii ergi",
+  resendNow: "Koodii irra deebi'ii ergi",
+  changeNumber: 'Lakkoofsa jijjiiri',
+  codeWrong:
+    '{count, plural, =0{Koodiin sirrii miti. Koodii haaraa gaafadhu.} =1{Koodiin sirrii miti. Yaaliin 1 hafeera.} other{Koodiin sirrii miti. Yaaliiwwan {count} hafaniiru.}}',
+  codeWrongNoCount: "Koodiin sirrii miti. SMS ilaaliitii irra deebi'ii yaali.",
+  codeExpired: 'Koodiin kun yeroon isaa darbeera. Haaraa gaafadhu.',
+  codeLocked: "Yaaliiwwan dogoggoraa baay'eedha. Koodii haaraa gaafadhu.",
+  tooManyRequests:
+    "{minutes, plural, =1{Koodiiwwan baay'een gaafatamaniiru. Daqiiqaa 1 booda yaali.} other{Koodiiwwan baay'een gaafatamaniiru. Daqiiqaa {minutes} booda yaali.}}",
+  needInternet: "Seenuuf interneetii barbaachisa. Walqabsiisiitii irra deebi'ii yaali.",
+  codeHelpBody:
+    'SMS Mezgeb irraa dhufe banii lakkoofsota 6 barreessi. Koodiin daqiiqaa 5f hojjeta.',
+  signedInAs: '{phone}n seenteetta',
+  signOut: "Ba'i",
+  signOutConfirm: "Bilbila kana irratti Mezgeb keessaa ba'uu?",
+
+  termsTitle: 'Osoo hin jalqabin',
+  termsPoint1: 'Mezgeb dhala ykn kaffaltii hin dabalu.',
+  termsPoint2: 'Bittaa suuqiin barreessu hunda battalumatti ni argita.',
+  termsPoint3:
+    'Wanti tokkollee hin haqamu. Dogoggorri sirreeffama lamaan keessan argitaniin ni sirraa’a.',
+  termsPoint4: 'Maallaqni Mezgeb keessa hin darbu. Akkuma duraanii suuqiif kaffalta.',
+  termsAgree: 'Walii galeera',
+  termsHelpBody: 'Kun waliigaltee dube Mezgeb ti. Kitaaba dube kee banuuf “Walii galeera” tuqi.',
+  invitesTitle: 'Suuqiiwwan si affeeran',
+  invitesBody: 'Waliigaltee ilaaluuf fi kitaaba dube kee banuuf suuqii tuqi.',
+  invitesNone: 'Hanga ammaatti suuqiin lakkoofsa kana affeere hin jiru.',
+  invitesNoneBody: 'Suuqiin {phone} Mezgeb irratti akka dabalu gaafadhu. Achiis “Haaromsi” tuqi.',
+  invitesOpen: 'Bani',
+  invitesContinue: 'Gara kitaaba dube koo',
+  invitesHelpBody:
+    'Suuqiin lakkoofsa bilbila keetiin si affeera. Suuqii sana yoo hin argine, lakkoofsa biraa fayyadamee ta’uu danda’a.',
+  wrongNumberTitle: 'Lakkoofsa dogoggoraa?',
+  wrongNumberBody:
+    'Suuqiin lakkoofsa biraa affeere. Suuqiin lakkoofsa akka mirkaneessu gaafadhu, ykn lakkoofsa sanaan seeni.',
+  joinedShop: 'Xumurameera. Kitaabni dube kee {shop} waliin banameera.',
+
+  homeTitle: 'Suuqiiwwan koo',
+  settingsTitle: "Qindaa'ina",
+};

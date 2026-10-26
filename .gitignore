@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dev-dist/
+coverage/
+playwright-report/
+test-results/
+.lighthouseci/
+*.tsbuildinfo
+.env
+.env.local
+.DS_Store

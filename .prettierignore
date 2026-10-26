@@ -1,0 +1,12 @@
+node_modules
+dist
+coverage
+playwright-report
+test-results
+pnpm-lock.yaml
+# Docs are hand-written; never reformat them.
+docs
+CLAUDE.md
+**/README.md
+# Copied from the backend (scripts/sync-shared.mjs).
+src/shared

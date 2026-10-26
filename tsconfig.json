@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "types": ["vite/client", "vite-plugin-pwa/client", "@testing-library/jest-dom/vitest"],
+    "paths": {
+      // @mezgeb/shared, copied from the backend by scripts/sync-shared.mjs.
+      "@shared/*": ["./src/shared/*"]
+    }
+  },
+  "include": ["src"],
+  // The service worker (tsconfig.sw.json) and Node-side files (tsconfig.node.json) differ.
+  "exclude": ["src/sw.ts"]
+}

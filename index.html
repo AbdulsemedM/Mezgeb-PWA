@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="am">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#1E6A52" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#101917" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="Mezgeb: your dube book with your shops" />
+    <link rel="icon" href="/icons/icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Mezgeb" />
+    <!-- WEB-001: the subset Ethiopic font is preloaded; system fonts cover the rest. -->
+    <link
+      rel="preload"
+      href="/fonts/noto-sans-ethiopic-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <title>Mezgeb · መዝገብ</title>
+    <style>
+      /* Paint the paper colour before any script or stylesheet arrives (Slow 3G). */
+      html {
+        background: #f4f7f2;
+      }
+      @media (prefers-color-scheme: dark) {
+        html {
+          background: #101917;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Mezgeb needs JavaScript. · መዝገብ JavaScript ያስፈልገዋል።</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
