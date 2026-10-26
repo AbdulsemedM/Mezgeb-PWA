@@ -10,7 +10,7 @@ test.describe('W1: installable shell', () => {
     expect(manifestHref).toBeTruthy();
     const manifest = await (await page.request.get(manifestHref!)).json();
     expect(manifest).toMatchObject({
-      name: 'Mezgeb',
+      name: 'Nota',
       start_url: '/',
       scope: '/',
       display: 'standalone',

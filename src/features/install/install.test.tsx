@@ -50,17 +50,17 @@ describe('W2: install screen (WEB-001 step 3)', () => {
     useUserAgent(UA.chrome);
     const app = renderApp('/install');
     const e = firePrompt('accepted');
-    await userEvent.click(screen.getByRole('button', { name: 'Put Mezgeb on my home screen' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Put Nota on my home screen' }));
     expect(e.prompt).toHaveBeenCalledOnce();
     expect(await screen.findByText('Open it from there.')).toBeVisible();
     expect(app.path()).toBe('/installed');
-    expect(screen.getByRole('img', { name: 'The Mezgeb icon on the home screen' })).toBeVisible();
+    expect(screen.getByRole('img', { name: 'The Nota icon on the home screen' })).toBeVisible();
   });
 
   it('Chrome, prompt not ready yet: "Getting ready…", then the prompt when it comes', async () => {
     useUserAgent(UA.chrome);
     const app = renderApp('/install');
-    await userEvent.click(screen.getByRole('button', { name: 'Put Mezgeb on my home screen' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Put Nota on my home screen' }));
     expect(screen.getByRole('button', { name: 'Getting ready…' })).toHaveAttribute(
       'aria-busy',
       'true',
@@ -75,7 +75,7 @@ describe('W2: install screen (WEB-001 step 3)', () => {
     useUserAgent(UA.chrome);
     vi.useFakeTimers({ shouldAdvanceTime: true });
     renderApp('/install');
-    await userEvent.click(screen.getByRole('button', { name: 'Put Mezgeb on my home screen' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Put Nota on my home screen' }));
     act(() => {
       vi.advanceTimersByTime(PROMPT_WAIT_MS + 10);
     });
@@ -91,9 +91,9 @@ describe('W2: install screen (WEB-001 step 3)', () => {
     useUserAgent(UA.chrome);
     renderApp('/install');
     firePrompt('dismissed');
-    await userEvent.click(screen.getByRole('button', { name: 'Put Mezgeb on my home screen' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Put Nota on my home screen' }));
     expect(
-      await screen.findByText('Not now? You can put Mezgeb on your home screen later.'),
+      await screen.findByText('Not now? You can put Nota on your home screen later.'),
     ).toBeVisible();
     expect(screen.getByRole('link', { name: 'Continue in the browser' })).toBeVisible();
   });
@@ -111,7 +111,7 @@ describe('W2: install screen (WEB-001 step 3)', () => {
   it('Telegram in-app browser: "Open in Chrome"', () => {
     useUserAgent(UA.telegram);
     renderApp('/install');
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Open Mezgeb in Chrome');
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Open Nota in Chrome');
     expect(screen.getByRole('link', { name: 'Open in Chrome' }).getAttribute('href')).toMatch(
       /^intent:\/\/.*;package=com\.android\.chrome;S\.browser_fallback_url=/,
     );

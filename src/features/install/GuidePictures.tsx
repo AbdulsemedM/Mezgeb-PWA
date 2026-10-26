@@ -130,7 +130,7 @@ export function IphoneAddToHomePicture({ label }: { label: string }) {
   );
 }
 
-/** After installing: the Mezgeb icon among other apps on the home screen. */
+/** After installing: the Nota icon among other apps on the home screen. */
 export function HomeScreenIconPicture({ label }: { label: string }) {
   return (
     <svg className="guide-picture" viewBox="0 0 200 120" role="img" aria-label={label}>
@@ -157,7 +157,7 @@ export function HomeScreenIconPicture({ label }: { label: string }) {
               textAnchor="middle"
               fill={INK}
             >
-              Mezgeb
+              Nota
             </text>
           </g>
         ) : (

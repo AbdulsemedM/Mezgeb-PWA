@@ -93,7 +93,7 @@ describe('UI kit', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Your phone number' })).toBeVisible();
     await userEvent.click(screen.getByRole('button', { name: 'Help' }));
     expect(screen.getByText('Type your own number.')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Call Mezgeb support' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Call Nota support' })).toHaveAttribute(
       'href',
       'tel:+251900000000',
     );
@@ -118,7 +118,7 @@ describe('UI kit', () => {
     expect(alert).toHaveTextContent('Check your internet, then try again.');
     await userEvent.click(screen.getByRole('button', { name: 'Try again' }));
     expect(onRetry).toHaveBeenCalled();
-    expect(screen.getByRole('link', { name: 'Call Mezgeb support' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Call Nota support' })).toBeInTheDocument();
   });
 
   it('CalmBanner is a status, not an alert', () => {

@@ -106,7 +106,7 @@ describe('W3: sign-in, calendar, terms and pending invites (US-02)', () => {
 
     await userEvent.click(await screen.findByRole('link', { name: /Abebe Shop/ }));
     expect(await screen.findByText('Your dube book with Abebe Shop')).toBeVisible();
-    expect(screen.getByText('Mezgeb never adds interest or fees.')).toBeVisible();
+    expect(screen.getByText('Nota never adds interest or fees.')).toBeVisible();
     await userEvent.click(screen.getByRole('button', { name: 'I agree' }));
 
     expect(await screen.findByText('Done. Your dube book with Abebe Shop is open.')).toBeVisible();
@@ -217,7 +217,7 @@ describe('W3: sign-in, calendar, terms and pending invites (US-02)', () => {
     await restoreSession();
     renderApp('/invites');
     expect(
-      await screen.findByText('Ask the shop to add 09 11 22 33 44 in Mezgeb. Then tap Refresh.'),
+      await screen.findByText('Ask the shop to add 09 11 22 33 44 in Nota. Then tap Refresh.'),
     ).toBeVisible();
     expect(screen.getByRole('heading', { name: 'Wrong number?' })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Refresh' })).toBeVisible();

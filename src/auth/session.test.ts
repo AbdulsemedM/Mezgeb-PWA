@@ -102,7 +102,7 @@ describe('session (ADR-016 cookie + signature)', () => {
     expect(saved).toEqual({ refreshId: 'r-1', user });
     expect(JSON.stringify(saved)).not.toMatch(/refresh_token/);
     const verify = server.calls.find((c) => c.path === '/v1/auth/verify')!;
-    expect(verify.body.device.label).toBe('Mezgeb web');
+    expect(verify.body.device.label).toBe('Nota web');
   });
 
   it('uses the access token, and renews it with a valid signature on token_expired', async () => {

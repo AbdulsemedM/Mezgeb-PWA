@@ -2,7 +2,7 @@ import { useT } from '../../i18n';
 import { BigButton, Screen } from '../../ui';
 import { HomeScreenIconPicture } from './GuidePictures';
 
-/** WEB-001 step 4: "Mezgeb is on your home screen. Open it from there." */
+/** WEB-001 step 4: "Nota is on your home screen. Open it from there." */
 export function InstalledScreen() {
   const t = useT();
   return (

@@ -9,14 +9,14 @@ test.describe('W2: invite and install (WEB-001 steps 1–4)', () => {
     await fakeApi(page, { 'GET /v1/invites/:code': () => ({ body: INVITE }) });
     await page.goto('/i/K7M2P9QX');
     await expect(
-      page.getByText('Abebe Shop wants to keep your dube book with you on Mezgeb'),
+      page.getByText('Abebe Shop wants to keep your dube book with you on Nota'),
     ).toBeVisible();
     await expectBigTapTargets(page);
 
     await page.getByRole('link', { name: 'Continue' }).click();
     await expect(page).toHaveURL(/\/install$/);
     await fireInstallPrompt(page, 'accepted');
-    await page.getByRole('button', { name: 'Put Mezgeb on my home screen' }).click();
+    await page.getByRole('button', { name: 'Put Nota on my home screen' }).click();
     await expect(page.getByText('Open it from there.')).toBeVisible();
     expect(await page.evaluate(() => (window as any).__prompted)).toBe(true);
   });
@@ -27,7 +27,7 @@ test.describe('W2: invite and install (WEB-001 steps 1–4)', () => {
     await fakeApi(page, { 'GET /v1/invites/:code': () => ({ body: INVITE }) });
     await page.goto('/i/K7M2P9QX');
     await page.getByRole('link', { name: 'Continue' }).click();
-    await page.getByRole('button', { name: 'Put Mezgeb on my home screen' }).click();
+    await page.getByRole('button', { name: 'Put Nota on my home screen' }).click();
     await expect(page.getByRole('button', { name: 'Getting ready…' })).toBeVisible();
     await expect(page.getByText('Use the browser menu')).toBeVisible({ timeout: 8000 });
     await expect(page.getByRole('link', { name: 'Continue in the browser' })).toBeVisible();

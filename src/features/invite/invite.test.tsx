@@ -26,7 +26,7 @@ describe('W2: invite screen (WEB-001 step 2)', () => {
     fakeFetch({ 'GET /v1/invites/:code': () => json(200, invite('open', 'en')) });
     const app = renderApp('/i/k7m2-p9qx');
     expect(
-      await screen.findByText('Abebe Shop wants to keep your dube book with you on Mezgeb'),
+      await screen.findByText('Abebe Shop wants to keep your dube book with you on Nota'),
     ).toBeVisible();
     expect(screen.getByRole('radio', { name: 'English' })).toHaveAttribute('aria-checked', 'true');
     expect(await kvGet('invite')).toEqual({
@@ -42,7 +42,7 @@ describe('W2: invite screen (WEB-001 step 2)', () => {
     fakeFetch({ 'GET /v1/invites/:code': () => json(200, invite('open', 'am')) });
     renderApp('/i/K7M2P9QX');
     expect(
-      await screen.findByText('Abebe Shop የዱቤ ደብተርዎን ከእርስዎ ጋር በመዝገብ ላይ መያዝ ይፈልጋል'),
+      await screen.findByText('Abebe Shop የዱቤ ደብተርዎን ከእርስዎ ጋር በኖታ ላይ መያዝ ይፈልጋል'),
     ).toBeVisible();
     expect(screen.getByRole('radio', { name: 'አማርኛ' })).toHaveAttribute('aria-checked', 'true');
   });
@@ -53,7 +53,7 @@ describe('W2: invite screen (WEB-001 step 2)', () => {
     await screen.findByRole('radio', { name: 'English' });
     await userEvent.click(screen.getByRole('radio', { name: 'English' }));
     expect(
-      screen.getByText('Abebe Shop wants to keep your dube book with you on Mezgeb'),
+      screen.getByText('Abebe Shop wants to keep your dube book with you on Nota'),
     ).toBeVisible();
   });
 
@@ -74,7 +74,7 @@ describe('W2: invite screen (WEB-001 step 2)', () => {
     fakeFetch({ 'GET /v1/invites/:code': () => json(404, { code: 'invite_not_found' }) });
     renderApp('/i/ZZZZZZZZ');
     expect((await screen.findAllByText('This link does not work')).length).toBeGreaterThan(0);
-    expect(screen.getByRole('link', { name: 'Call Mezgeb support' })).toBeVisible();
+    expect(screen.getByRole('link', { name: 'Call Nota support' })).toBeVisible();
     expect(screen.getByRole('link', { name: 'Continue' })).toBeVisible();
   });
 
@@ -95,7 +95,7 @@ describe('W2: invite screen (WEB-001 step 2)', () => {
     // Online once, then offline again: the cached invite shows.
     const online = fakeFetch({ 'GET /v1/invites/:code': () => json(200, invite('open', 'en')) });
     await userEvent.click(screen.getByRole('button', { name: 'Try again' }));
-    await screen.findByText('Abebe Shop wants to keep your dube book with you on Mezgeb');
+    await screen.findByText('Abebe Shop wants to keep your dube book with you on Nota');
     expect(online.calls).toHaveLength(1);
 
     fakeFetch({});

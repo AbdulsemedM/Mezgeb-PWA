@@ -1,7 +1,7 @@
 /**
  * WEB-001 step 3: Chromium's `beforeinstallprompt` arrives once, early, and only after the
  * page looks installable. It is captured at startup (before React renders) and kept here
- * until the person taps "Put Mezgeb on my home screen".
+ * until the person taps "Put Nota on my home screen".
  */
 export interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;

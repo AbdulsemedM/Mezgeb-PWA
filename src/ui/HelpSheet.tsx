@@ -12,7 +12,7 @@ export interface HelpContent {
   picture?: { src: string; alt: string };
 }
 
-/** The "?" on every screen: a short help sheet with a "Call Mezgeb support" button. */
+/** The "?" on every screen: a short help sheet with a "Call Nota support" button. */
 export function HelpButton({ help }: { help: HelpContent }) {
   const t = useT();
   const [open, setOpen] = useState(false);

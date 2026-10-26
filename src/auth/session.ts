@@ -85,7 +85,7 @@ export async function verifyCode(
       body: {
         phone,
         code,
-        device: { id: device.id, public_key: device.publicKey, label: 'Mezgeb web' },
+        device: { id: device.id, public_key: device.publicKey, label: 'Nota web' },
         session: 'cookie',
       },
     });
