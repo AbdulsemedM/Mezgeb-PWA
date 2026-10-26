@@ -2,7 +2,10 @@ import { Navigate, useParams } from 'react-router';
 import { useI18n } from '../../i18n';
 import { formatAmount } from '../../lib/money';
 import { displayInstantDate } from '../../lib/dates';
-import { AmountText, Screen, StatusPill } from '../../ui';
+import { useQueued } from '../../data/queue';
+import { AmountText, BigButton, Screen, StatusPill } from '../../ui';
+import { DISPUTE_KINDS } from '../disputes/DisputeScreen';
+import { QueueNotice } from './QueueNotice';
 import { useBook } from './BookScreen';
 import {
   balanceEffect,
@@ -22,19 +25,43 @@ export function EntryScreen() {
   const cached = useBook(accountId);
   const book = cached.data;
   const entry = book?.entries.find((e) => e.id === entryId);
-  if (book && !entry) return <Navigate to={`/shops/${accountId}`} replace />;
 
   const corrected = entry?.ref_entry_id
     ? book?.entries.find((e) => e.id === entry.ref_entry_id)
     : undefined;
   const who = entry && book ? whoTook(t, entry, book.representatives) : null;
+  const disputes = book?.disputes.filter((d) => d.entry_id === entryId) ?? [];
+  const waiting = useQueued(DISPUTE_KINDS).filter(
+    (w) => !w.failed && w.path === `/v1/entries/${entryId}/disputes`,
+  );
+  const canDispute =
+    entry?.type === 'purchase' &&
+    waiting.length === 0 &&
+    !disputes.some((d) => d.status === 'open');
+
+  if (book && !entry) return <Navigate to={`/shops/${accountId}`} replace />;
 
   return (
     <Screen
       title={entry ? entryTypeLabel(t, entry) : t('entryTitle')}
       back={`/shops/${accountId}`}
       help={{ title: t('entryTitle'), body: t('bookHelpBody') }}
-      banner={<Freshness cached={cached} />}
+      banner={
+        <>
+          <Freshness cached={cached} />
+          <QueueNotice kinds={DISPUTE_KINDS} />
+        </>
+      }
+      actions={
+        canDispute ? (
+          <BigButton
+            label={t('disputeButton')}
+            icon="flag"
+            variant="secondary"
+            to={`/shops/${accountId}/entries/${entryId}/dispute`}
+          />
+        ) : undefined
+      }
     >
       {entry && (
         <>
@@ -79,6 +106,32 @@ export function EntryScreen() {
                 </li>
               ))}
             </ul>
+          )}
+          {(disputes.length > 0 || waiting.length > 0) && (
+            <section className="stack" aria-labelledby="dispute-title">
+              <h2 id="dispute-title" className="title">
+                {t('disputeYours')}
+              </h2>
+              {waiting.map((w) => (
+                <div key={w.id} className="card">
+                  <p>{(w.body as { reason: string }).reason}</p>
+                  <StatusPill label={t('notSentYet')} tone="warn" icon="clock" />
+                </div>
+              ))}
+              {disputes.map((d) => (
+                <div key={d.id} className="card">
+                  <p>{d.reason}</p>
+                  {d.status === 'open' ? (
+                    <StatusPill label={t('disputeOpen')} tone="warn" icon="clock" />
+                  ) : d.resolution_entry_id ? (
+                    <StatusPill label={t('disputeCorrected')} tone="good" icon="check" />
+                  ) : (
+                    <StatusPill label={t('disputeAnswered')} tone="good" icon="check" />
+                  )}
+                  {d.resolution_note && <p>{t('disputeShopNote', { note: d.resolution_note })}</p>}
+                </div>
+              ))}
+            </section>
           )}
         </>
       )}

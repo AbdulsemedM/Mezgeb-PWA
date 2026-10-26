@@ -841,3 +841,81 @@ p {
   border: 2px solid var(--ink3);
   border-radius: 6px;
 }
+
+/* ---- Quantity stepper and item tiles ---- */
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stepper__button {
+  border: 2px solid var(--ledger);
+  color: var(--ledger);
+  border-radius: 12px;
+}
+
+.stepper__value {
+  min-width: 2ch;
+  text-align: center;
+  font-size: 1.375rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.item-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(9rem, 100%), 1fr));
+  gap: var(--gap);
+}
+
+.item-tile {
+  min-height: 7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border-radius: var(--radius);
+  border: 2px solid var(--rule);
+  background: var(--surface);
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.item-tile[aria-pressed='true'] {
+  border-color: var(--ledger);
+  background: var(--ledger-soft);
+}
+
+.item-tile__letter {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--chip);
+  color: var(--ledger);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.steps-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 4px;
+}
+
+.steps-track__step {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--chip);
+}
+
+.steps-track__step--done {
+  background: var(--good);
+}

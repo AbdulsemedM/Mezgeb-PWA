@@ -2,6 +2,9 @@ import type { MyAccount } from '../data/accounts';
 import type {
   Entry,
   Limits,
+  CatalogueItem,
+  Dispute,
+  Order,
   PaymentReport,
   PaymeRequest,
   Raise,
@@ -154,6 +157,9 @@ export function shopsApi(
     reps?: Representative[];
     raises?: Raise[];
     reports?: PaymentReport[];
+    orders?: Order[];
+    disputes?: Dispute[];
+    catalogue?: CatalogueItem[];
   }[],
 ) {
   const find = (path: string) => shops.find((s) => path.includes(`/accounts/${s.account.id}`))!;
@@ -172,6 +178,12 @@ export function shopsApi(
     'PATCH /v1/accounts/:id': ({ path }: { path: string }) => json(200, find(path).account),
     'GET /v1/accounts/:id/payment-reports': ({ path }: { path: string }) =>
       json(200, { payment_reports: find(path).reports ?? [] }),
+    'GET /v1/accounts/:id/orders': ({ path }: { path: string }) =>
+      json(200, { orders: find(path).orders ?? [] }),
+    'GET /v1/accounts/:id/disputes': ({ path }: { path: string }) =>
+      json(200, { disputes: find(path).disputes ?? [] }),
+    'GET /v1/accounts/:id/catalogue': ({ path }: { path: string }) =>
+      json(200, { items: find(path).catalogue ?? [] }),
     'GET /v1/accounts/:id/raises': ({ path }: { path: string }) =>
       json(200, { raises: find(path).raises ?? [] }),
   };

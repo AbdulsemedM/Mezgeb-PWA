@@ -100,6 +100,45 @@ export interface PaymentReport {
   has_receipt: boolean;
 }
 
+/** ADR-014: what the customer asked for; the priced list once the shop priced it. */
+export interface OrderLine {
+  name: string;
+  qty?: string | null;
+  unit?: string | null;
+  item_id?: string | null;
+  note?: string | null;
+  unit_price?: number;
+  amount?: number;
+  unavailable?: boolean;
+}
+
+export interface Order {
+  id: string;
+  account_id: string;
+  lines: OrderLine[];
+  address_note: string | null;
+  preferred_time: string | null;
+  status: 'sent' | 'accepted' | 'priced' | 'out_for_delivery' | 'delivered' | 'declined';
+  decline_reason: string | null;
+  delivery_person: string | null;
+  delivered_entry_id: string | null;
+  receipt_confirmed_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/** LED-5/6: the customer's dispute of an entry, answered by a correction or a note. */
+export interface Dispute {
+  id: string;
+  entry_id: string;
+  reason: string;
+  status: 'open' | 'resolved';
+  resolution_entry_id: string | null;
+  resolution_note: string | null;
+  resolved_at: string | null;
+  created_at: string;
+}
+
 /** One shop's dube book, cached whole for offline reading (WEB-001). */
 export interface Book {
   account: MyAccount;
@@ -110,19 +149,24 @@ export interface Book {
   /** Waiting raise requests; acted on online only. */
   raises: Raise[];
   reports: PaymentReport[];
+  orders: Order[];
+  disputes: Dispute[];
 }
 
 export async function fetchBook(accountId: string): Promise<Book> {
   const base = `/v1/accounts/${accountId}`;
-  const [account, entries, limits, payme, reps, raises, reports] = await Promise.all([
-    api<MyAccount>('GET', base),
-    api<{ entries: Entry[] }>('GET', `${base}/entries`),
-    api<Limits>('GET', `${base}/limits`),
-    api<{ payme_requests: PaymeRequest[] }>('GET', `${base}/payme-requests`),
-    api<{ representatives: Representative[] }>('GET', `${base}/representatives`),
-    api<{ raises: Raise[] }>('GET', `${base}/raises`),
-    api<{ payment_reports: PaymentReport[] }>('GET', `${base}/payment-reports`),
-  ]);
+  const [account, entries, limits, payme, reps, raises, reports, orders, disputes] =
+    await Promise.all([
+      api<MyAccount>('GET', base),
+      api<{ entries: Entry[] }>('GET', `${base}/entries`),
+      api<Limits>('GET', `${base}/limits`),
+      api<{ payme_requests: PaymeRequest[] }>('GET', `${base}/payme-requests`),
+      api<{ representatives: Representative[] }>('GET', `${base}/representatives`),
+      api<{ raises: Raise[] }>('GET', `${base}/raises`),
+      api<{ payment_reports: PaymentReport[] }>('GET', `${base}/payment-reports`),
+      api<{ orders: Order[] }>('GET', `${base}/orders`),
+      api<{ disputes: Dispute[] }>('GET', `${base}/disputes`),
+    ]);
   return {
     account,
     entries: entries.entries,
@@ -131,6 +175,8 @@ export async function fetchBook(accountId: string): Promise<Book> {
     representatives: reps.representatives,
     raises: raises.raises,
     reports: reports.payment_reports,
+    orders: orders.orders,
+    disputes: disputes.disputes,
   };
 }
 
@@ -161,4 +207,16 @@ export async function fetchHome(): Promise<HomeData> {
     payme: perShop.flatMap((s) => s.payme),
     raises: perShop.flatMap((s) => s.raises),
   };
+}
+
+/** ADR-016: the shop's items the customer can order (names and units only). */
+export interface CatalogueItem {
+  id: string;
+  name: string;
+  unit: string | null;
+}
+
+export async function fetchCatalogue(accountId: string): Promise<CatalogueItem[]> {
+  return (await api<{ items: CatalogueItem[] }>('GET', `/v1/accounts/${accountId}/catalogue`))
+    .items;
 }

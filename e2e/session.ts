@@ -98,6 +98,17 @@ export function shopRoutes() {
     'GET /v1/accounts/:id/representatives': () => ({ body: { representatives: [REP] } }),
     'GET /v1/accounts/:id/raises': () => ({ body: { raises: [] } }),
     'GET /v1/accounts/:id/payment-reports': () => ({ body: { payment_reports: [] } }),
+    'GET /v1/accounts/:id/orders': () => ({ body: { orders: [] } }),
+    'GET /v1/accounts/:id/disputes': () => ({ body: { disputes: [] } }),
+    'GET /v1/accounts/:id/catalogue': () => ({
+      body: {
+        items: [
+          { id: 'i-1', name: 'Bread', unit: null },
+          { id: 'i-2', name: 'Sugar', unit: 'kg' },
+          { id: 'i-3', name: 'Teff', unit: 'kg' },
+        ],
+      },
+    }),
   };
 }
 

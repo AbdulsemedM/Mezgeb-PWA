@@ -9,6 +9,9 @@ import { LimitsScreen } from '../features/limits/LimitsScreen';
 import { AddPersonScreen } from '../features/people/AddPersonScreen';
 import { PeopleScreen } from '../features/people/PeopleScreen';
 import { PayScreen } from '../features/payments/PayScreen';
+import { DisputeScreen } from '../features/disputes/DisputeScreen';
+import { NewOrderScreen } from '../features/orders/NewOrderScreen';
+import { OrdersScreen } from '../features/orders/OrdersScreen';
 import { InvitesScreen } from '../features/invites/InvitesScreen';
 import { TermsScreen } from '../features/invites/TermsScreen';
 import { CalendarScreen } from '../features/signin/CalendarScreen';
@@ -133,6 +136,30 @@ export const routes: AppRoute[] = [
     element: (
       <RequireSession>
         <PayScreen />
+      </RequireSession>
+    ),
+  },
+  {
+    path: '/shops/:accountId/orders',
+    element: (
+      <RequireSession>
+        <OrdersScreen />
+      </RequireSession>
+    ),
+  },
+  {
+    path: '/shops/:accountId/orders/new',
+    element: (
+      <RequireSession>
+        <NewOrderScreen />
+      </RequireSession>
+    ),
+  },
+  {
+    path: '/shops/:accountId/entries/:entryId/dispute',
+    element: (
+      <RequireSession>
+        <DisputeScreen />
       </RequireSession>
     ),
   },
