@@ -1,0 +1,10 @@
+.env
+.env.*
+node_modules
+dist
+dev-dist
+coverage
+test-results
+playwright-report
+.lighthouseci
+.vercel
