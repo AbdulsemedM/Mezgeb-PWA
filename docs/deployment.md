@@ -4,6 +4,13 @@ The PWA is static files (`dist/`) on HTTPS, on the same site as the API (for exa
 `https://mezgeb.et` and `https://api.mezgeb.et`): the refresh cookie is `SameSite=Lax` and must
 reach the API from the PWA (backend ADR-016).
 
+## Vercel
+
+Hosted on Vercel (backend ADR-017 and its `docs/deployment.md`): `vercel.json` builds, then
+`scripts/vercel-output.mjs` writes the Build Output with the host settings below (CSP from
+`dist/csp.txt`) and proxies `/v1/*` to `API_ORIGIN`, so the PWA and the API share one origin and
+`VITE_API_URL` stays empty.
+
 ## Build
 
 ```sh

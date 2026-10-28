@@ -9,6 +9,7 @@ export default tseslint.config(
     ignores: [
       '**/dist/**',
       '**/dev-dist/**',
+      '.vercel/**',
       '**/coverage/**',
       '**/node_modules/**',
       'playwright-report/**',
